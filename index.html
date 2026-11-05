@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Balad'Images - Le cinéma Familles Rurales</title>
+
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Source+Sans+3:wght@600;700;900&display=swap" rel="stylesheet">
+
+<!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
+<script>
+  window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
+  window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
+</script>
+
+<style>
+:root {
+  --bg-dark: #0f0f12;
+  --bg-dark-rgb: 15, 15, 18;
+  --bg-card: #18181c;
+  --bg-surface: #222228;
+  --brand-orange: #E88C1E;
+  --brand-orange-hover: #d17a12;
+  --text-main: #ffffff;
+  --text-muted: #a0a0ab;
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --hero-delay: 30s;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.4;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font-family: inherit; }
+
+/* ===== LOADER ===== */
+#app-loader {
+  position: fixed; inset: 0; background-color: var(--bg-dark);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999; transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+#app-loader.hidden { opacity: 0; visibility: hidden; }
+.spinner {
+  width: 44px; height: 44px; border: 3.5px solid rgba(255,255,255,0.1);
+  border-top-color: var(--brand-orange); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin-bottom: 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#page-transition-overlay {
+  position: fixed; inset: 0; background-color: #000; z-index: 9998;
+  opacity: 0; pointer-events: none; transition: opacity 0.18s ease-in-out;
+}
+#page-transition-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(180deg, rgba(10,10,14,calc(.30 + var(--hdr-dark, 0))) 0%, rgba(10,10,14,calc(.10 + var(--hdr-dark, 0) * .4)) 100%);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 10px 4%; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.header-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logo-container {
+  display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem;
+  letter-spacing: -0.01em; color: white; text-decoration: none; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.brand-logo-img { height: 38px; width: auto; max-width: 150px; display: block; object-fit: contain; flex-shrink: 0; }
+.logo-text { color: white; font-family: inherit; }
+.header-center { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: flex-end; max-width: 500px; }
+.header-search-container { position: relative; display: flex; align-items: center; width: 100%; max-width: 260px; }
+.header-search-input {
+  width: 100%; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 22px; padding: 8px 36px 8px 14px; color: white; font-size: 0.85rem; font-family: inherit;
+  outline: none; transition: all 0.2s ease;
+}
+.header-search-input::placeholder { color: rgba(255,255,255,0.6); }
+.header-search-input:focus { background: rgba(0,0,0,0.9); border-color: var(--brand-orange); }
+.search-btn-trigger {
+  position: absolute; right: 4px; background: transparent; border: none; cursor: pointer; padding: 6px;
+  display: flex; align-items: center; justify-content: center; z-index: 3;
+}
+.search-btn-trigger svg { width: 16px; height: 16px; fill: rgba(255,255,255,0.8); }
+.search-dropdown {
+  position: absolute; top: 100%; left: 0; right: 0; background: #18181c; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm); margin-top: 6px; max-height: 250px; overflow-y: auto; display: none;
+  z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.search-dropdown.open { display: block; }
+.search-dropdown-item {
+  padding: 10px 14px; color: white; font-size: 0.88rem; cursor: pointer; display: block; text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s ease;
+}
+.search-dropdown-item:hover { background: var(--bg-surface); color: var(--brand-orange); }
+.header-location-wrapper { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; }
+.header-location-select {
+  appearance: none; -webkit-appearance: none; background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22); color: white; padding: 8px 24px 8px 12px; border-radius: 22px;
+  font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; outline: none;
+  transition: all 0.18s ease; max-width: 130px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
+}
+.header-location-select:hover { border-color: var(--brand-orange); }
+.header-location-select option { background: var(--bg-card); color: white; }
+.dropdown-icon { position: absolute; right: 8px; pointer-events: none; font-size: 0.6rem; color: white; }
+.header-nav { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.nav-link {
+  color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.86rem; font-weight: 600;
+  cursor: pointer; padding: 4px 6px; white-space: nowrap;
+}
+.nav-link:hover, .nav-link.active { color: white; }
+.nav-link.active { box-shadow: 0 2px 0 var(--brand-orange); }
+.menu-burger-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; z-index: 1001; padding: 4px; }
+.mobile-nav-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,15,18,0.98); backdrop-filter: blur(15px);
+  z-index: 999; flex-direction: column; justify-content: center; align-items: center; gap: 24px;
+}
+.mobile-nav-overlay.open { display: flex; }
+.mobile-nav-overlay .nav-link { font-size: 1.2rem; }
+body.view-venue-active .header-search-container { display: none !important; }
+
+/* ===== VUES ===== */
+.view-page { display: none; min-height: 100vh; opacity: 0; transition: opacity 0.25s ease-in-out; }
+.view-page.active-view { display: block; opacity: 1; }
+.view-page.page-simple { min-height: 70vh; }
+
+/* ===== HERO ACCUEIL ===== */
+.hero-slider-wrapper { position: relative; width: 100%; height: 70vh; min-height: 500px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero-slide {
+  position: absolute; inset: 0; opacity: 0; visibility: hidden;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+  display: flex; align-items: flex-end; cursor: pointer;
+}
+.hero-slide.active { opacity: 1; visibility: visible; }
+.hero-bg-layer {
+  position: absolute; inset: -3%; width: 106%; height: 106%; transform: scale(1.055);
+  object-fit: cover; object-position: center top; background: var(--bg-card);
+}
+/* Fin grain : masque légèrement le flou des images basse résolution */
+.hero-slide::before, .movie-hero::before, .venue-grain::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image: var(--grain); background-size: 160px 160px; mix-blend-mode: overlay; opacity: 0.16;
+}
+.venue-grain { position: relative; }
+.hero-overlay-gradient {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: linear-gradient(180deg,
+    rgba(15,15,18,0.25) 0%, rgba(15,15,18,0.10) 30%, rgba(15,15,18,0.18) 50%, rgba(15,15,18,0.45) 68%,
+    rgba(15,15,18,0.78) 82%, rgba(15,15,18,0.96) 94%, var(--bg-dark) 100%);
+}
+.hero-content { position: relative; max-width: 900px; z-index: 3; width: 100%; padding: 185px 84px 55px 84px; }
+.badge-salle {
+  display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 14px; font-size: 0.8rem;
+  font-weight: 600; margin-bottom: 10px; color: #fff; text-decoration: none; transition: all 0.18s;
+}
+a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--brand-orange); }
+.hero-title, .movie-title {
+  font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.hero-subtitle { font-size: 0.95rem; opacity: 0.85; margin-top: -2px; margin-bottom: 14px; }
+.hero-meta, .movie-quick-meta {
+  font-size: 0.88rem; color: #e0e0e0; margin-bottom: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.badge-2k, .age-badge {
+  background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); color: #fff;
+  font-size: 0.72rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;
+}
+.hero-synopsis {
+  color: #e0e0e5; font-size: 0.9rem; line-height: 1.45; margin-bottom: 14px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.hero-slots-container { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; z-index: 4; position: relative; }
+.btn-glass-slot {
+  background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px);
+  color: white !important; padding: 9px 16px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; text-decoration: none; transition: all 0.18s ease; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-glass-slot:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.45); }
+
+/* Flèches du carrousel */
+.hero-arrow {
+  position: absolute; top: 52%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px;
+  border-radius: 50%; background: none; border: none; opacity: .55; color: #fff;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: opacity 0.18s;
+}
+.hero-arrow:hover { opacity: 1; }
+.hero-arrow:focus-visible { outline: 2px solid var(--brand-orange); outline-offset: 2px; }
+.hero-arrow.prev { left: 1.5%; }
+.hero-arrow.next { right: 1.5%; }
+.hero-arrow svg { filter: drop-shadow(0 1px 5px rgba(0,0,0,.8)); width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+.hero-dots-indicator { position: absolute; bottom: 15px; left: 84px; z-index: 10; display: flex; gap: 8px; align-items: center; }
+.dot-item { height: 4px; width: 22px; background: rgba(255,255,255,0.3); border-radius: 2px; cursor: pointer; transition: width 0.3s ease; position: relative; overflow: hidden; }
+.dot-item.active { width: 42px; }
+.dot-item-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0%; background: var(--brand-orange); border-radius: 2px; }
+.dot-item.active .dot-item-fill { animation: heroProgress var(--hero-delay) linear forwards; }
+@keyframes heroProgress { from { width: 0%; } to { width: 100%; } }
+
+/* ===== PAGE DETAIL FILM ===== */
+.movie-hero {
+  --tint: 15, 15, 18;
+  --tint2: 15, 15, 18;
+  position: relative; width: 100%; min-height: 82vh; display: flex; align-items: flex-end; justify-content: space-between;
+  overflow: hidden; padding: 225px 5% 95px 5%; z-index: 1;
+}
+.movie-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; -webkit-mask-image: linear-gradient(180deg,#000 0%,#000 52%,transparent 100%); mask-image: linear-gradient(180deg,#000 0%,#000 52%,transparent 100%); }
+/* Voile teinté : couleur dominante de l'image, assombrie, qui tend vers le noir en bas */
+.movie-hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 60%,
+      rgba(var(--tint), 0.94) 0%, rgba(var(--tint), 0.78) 28%, rgba(var(--tint), 0.48) 52%,
+      rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
+    linear-gradient(180deg,
+      rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.42) 50%,
+      rgba(var(--tint2), 0.68) 76%, rgba(var(--tint2), 0) 100%);
+}
+.movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
+.trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
+.btn-play-trailer {
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.28); color: white; backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.2s ease;
+  cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.btn-play-trailer:hover { transform: scale(1.08); background: rgba(232,140,30,0.9); border-color: var(--brand-orange); }
+.btn-play-trailer svg { width: 32px; height: 32px; fill: white; margin-left: 2px; }
+.btn-play-trailer .mobile-trailer-text { display: none; }
+.synopsis-wrapper { margin-bottom: 10px; line-height: 1.5; }
+.synopsis-text { display: inline; color: #f0f0f5; font-size: 0.92rem; }
+.btn-toggle-synopsis {
+  display: none; background: none; border: none; color: var(--brand-orange); font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; padding: 0 0 0 6px; text-decoration: underline;
+}
+.movie-credits-text { font-size: 0.85rem; color: #c4c4cf; margin: 10px 0; display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+.movie-credits-text strong { color: #fff; font-weight: 600; margin-right: 4px; }
+.credit-block { display: inline-flex; align-items: flex-start; }
+
+/* ===== CATALOGUE ===== */
+.catalog-container { padding: 30px 5%; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.section-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 14px; }
+.btn-back-home {
+  background: rgba(255,255,255,0.12); border: 1px solid var(--border-subtle); color: white; padding: 8px 16px;
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-back-home:hover { background: rgba(255,255,255,0.22); }
+.grid-movies { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; align-items: start; }
+.card-movie {
+  background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-subtle); overflow: hidden;
+  display: flex; flex-direction: column; transition: border-color 0.2s ease, transform 0.18s ease; cursor: pointer; position: relative;
+}
+.card-movie:hover { border-color: rgba(255,255,255,0.35); transform: translateY(-3px); }
+.card-poster { position: relative; height: 260px; background: var(--bg-surface); }
+.card-poster img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+.card-poster img.loaded { opacity: 1; }
+.card-content { padding: 16px; display: flex; flex-direction: column; }
+.card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 5px; color: white; }
+.card-meta { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; display: flex; gap: 6px; align-items: center; }
+.card-slots-area { border-top: 1px solid var(--border-subtle); padding-top: 10px; }
+.slots-label { font-size: 0.7rem; text-transform: uppercase; font-weight: 800; color: var(--brand-orange); margin-bottom: 8px; }
+.slots-list { display: flex; flex-direction: column; gap: 6px; }
+.slot-pill {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); color: white; padding: 8px 12px;
+  border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; text-decoration: none; display: flex;
+  justify-content: space-between; align-items: center; transition: all 0.18s ease; cursor: pointer;
+}
+.slot-pill .town { font-size: 0.75rem; color: var(--brand-orange); font-weight: 700; }
+.slot-pill:hover { background: var(--brand-orange); border-color: var(--brand-orange); color: white; }
+.slot-pill:hover .town { color: white; }
+.btn-more-slots {
+  background: transparent; border: 1px dashed var(--border-subtle); color: var(--text-muted); padding: 7px;
+  border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center;
+  margin-top: 6px; transition: all 0.18s; width: 100%;
+}
+.btn-more-slots:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+
+/* ===== SEANCES ===== */
+.showtimes-section { position: relative; z-index: 3; margin-top: -65px; padding: 15px 5% 50px 5%; }
+.horizontal-cards-strip {
+  display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 22px;
+  scrollbar-width: thin; scrollbar-color: var(--brand-orange) transparent;
+}
+.showtime-horizontal-card {
+  min-width: 210px; max-width: 250px; background: rgba(24,24,28,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md); padding: 14px; cursor: pointer; transition: all 0.18s ease; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.showtime-horizontal-card:hover, .showtime-horizontal-card.active { border-color: var(--brand-orange); background: rgba(34,34,40,0.7); }
+.town-tag { color: var(--brand-orange); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; }
+.card-date { font-size: 0.92rem; font-weight: 800; color: white; }
+.card-venue { font-size: 0.78rem; color: var(--text-muted); }
+.practical-details-panel {
+  background: rgba(24,24,28,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 22px;
+  max-width: 850px; transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; opacity: 1; transform: translateY(0);
+}
+.practical-details-panel.changing { opacity: 0; transform: translateY(6px); }
+.panel-header {
+  border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 16px; display: flex;
+  justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.panel-title { font-size: 1.05rem; font-weight: 800; color: white; }
+.panel-title span { color: var(--brand-orange); }
+.practical-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 16px; }
+.practical-item { display: flex; flex-direction: column; gap: 3px; }
+.item-label { font-size: 0.72rem; text-transform: uppercase; font-weight: 800; color: var(--brand-orange); }
+.item-value { font-size: 0.88rem; color: white; font-weight: 600; }
+.tarif-line { display: flex; justify-content: space-between; gap: 14px; font-size: 0.86rem; padding: 2px 0; }
+.tarif-line span:last-child { color: var(--brand-orange); font-weight: 800; white-space: nowrap; }
+.tarif-link { font-size: 0.76rem; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 4px; display: inline-block; font-weight: 600; }
+.tarif-link:hover { color: var(--brand-orange); }
+.actions-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-agenda {
+  background: var(--bg-surface); border: 1px solid var(--brand-orange); color: var(--brand-orange); padding: 9px 16px;
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700; cursor: pointer; display: inline-flex;
+  align-items: center; gap: 6px; text-decoration: none; transition: all 0.18s;
+}
+.btn-agenda:hover, .btn-agenda.filled { background: var(--brand-orange); color: white; }
+.btn-agenda.filled:hover { background: var(--brand-orange-hover); border-color: var(--brand-orange-hover); }
+
+/* ===== VUE LIEU ===== */
+.venue-details-section { background: var(--bg-card); border-top: 1px solid var(--border-subtle); padding: 30px 5%; margin-top: 30px; }
+.venue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.venue-info-box h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
+.info-item { display: flex; gap: 10px; margin-bottom: 8px; font-size: 0.88rem; color: #d1d1d6; }
+.info-item strong { color: white; min-width: 90px; }
+.badge-pmr { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
+
+/* ===== PAGES SIMPLES ===== */
+.page-simple {
+  padding: 120px 5% 50px;
+  background: radial-gradient(ellipse 80% 40% at 50% 0, rgba(232,140,30,0.12), transparent 70%), var(--bg-dark);
+}
+.page-wrap { max-width: 980px; margin: 0 auto; }
+.page-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 10px; }
+.page-lead { color: var(--text-muted); margin-bottom: 26px; max-width: 700px; font-size: 0.98rem; line-height: 1.55; }
+.prose p { margin-bottom: 12px; color: #d1d1d6; font-size: 0.95rem; line-height: 1.65; max-width: 760px; }
+.prose h2 { font-size: 1rem; margin: 26px 0 8px; color: var(--brand-orange); letter-spacing: 0.02em; }
+.prose a { color: var(--brand-orange); }
+.prose ul { margin: 0 0 12px 20px; color: #d1d1d6; font-size: 0.95rem; line-height: 1.65; }
+
+/* Tarifs */
+.tarifs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 22px; }
+.tarif-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.tarif-card.featured { border-color: var(--brand-orange); background: linear-gradient(180deg, rgba(232,140,30,0.10), var(--bg-card) 60%); }
+.tarif-card h3 { font-size: 1.05rem; font-weight: 800; }
+.tarif-price { font-size: 2.6rem; font-weight: 900; letter-spacing: -0.03em; color: var(--brand-orange); line-height: 1; }
+.tarif-price small { font-size: 1rem; font-weight: 700; color: #fff; margin-left: 4px; }
+.tarif-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 0.88rem; color: #d1d1d6; }
+.tarif-card li::before { content: "✓"; color: var(--brand-orange); font-weight: 800; margin-right: 8px; }
+.tarif-note { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 20px; font-size: 0.88rem; color: #d1d1d6; line-height: 1.55; }
+
+/* Activités */
+.activites-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.card-activite { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; cursor: pointer; transition: border-color 0.2s, transform 0.18s; }
+.card-activite:hover { border-color: var(--brand-orange); transform: translateY(-3px); }
+.card-activite .ico { font-size: 1.8rem; margin-bottom: 10px; }
+.card-activite h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; }
+.card-activite p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Contact */
+.contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: start; }
+.form-card, .info-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 24px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-field label { font-size: 0.8rem; font-weight: 700; color: #d1d1d6; }
+.form-field input, .form-field textarea {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 11px 12px;
+  color: white; font-family: inherit; font-size: 0.9rem; outline: none; transition: border-color 0.18s;
+}
+.form-field input:focus, .form-field textarea:focus { border-color: var(--brand-orange); }
+.form-field textarea { min-height: 140px; resize: vertical; }
+.btn-primary {
+  background: var(--brand-orange); color: #fff; border: none; border-radius: var(--radius-sm); padding: 12px 22px;
+  font-size: 0.92rem; font-weight: 800; cursor: pointer; transition: background 0.18s;
+}
+.btn-primary:hover { background: var(--brand-orange-hover); }
+.form-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+.info-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 12px; }
+.info-card p { font-size: 0.9rem; color: #d1d1d6; line-height: 1.6; margin-bottom: 14px; }
+.map-embed { width: 100%; height: 240px; border: 0; border-radius: var(--radius-sm); filter: grayscale(0.25); }
+
+/* Nos salles */
+.salles-search { position: relative; display: flex; gap: 10px; max-width: 560px; margin-bottom: 14px; }
+.salles-search input {
+  flex: 1; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 22px; padding: 11px 16px;
+  color: white; font-family: inherit; font-size: 0.92rem; outline: none;
+}
+.salles-search input:focus { border-color: var(--brand-orange); }
+.salles-search .search-dropdown { top: 100%; margin-top: 6px; left: 0; right: 70px; }
+#sallesResult { margin-bottom: 14px; }
+.result-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 18px; }
+.result-box h3 { font-size: 0.98rem; font-weight: 800; margin-bottom: 10px; }
+.result-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 0; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; }
+.result-item .dist { color: var(--brand-orange); font-weight: 800; }
+.result-actions { display: flex; gap: 8px; }
+.btn-mini { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: white; padding: 6px 12px; border-radius: 16px; font-size: 0.76rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+.btn-mini:hover { border-color: var(--brand-orange); color: var(--brand-orange); }
+#sallesMap { position: relative; z-index: 0; height: 62vh; min-height: 420px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-card); }
+.salles-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 10px; }
+.leaflet-container .leaflet-popup-content-wrapper { background: #1c1c21; color: #fff; border-radius: 14px; padding: 0; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+.leaflet-container .leaflet-popup-content { margin: 0 !important; width: 250px !important; font-family: 'Inter', sans-serif; color: #fff; }
+.leaflet-container .leaflet-popup-tip { background: #1c1c21; }
+.leaflet-popup .popup-body h4 { color: #fff; }
+.leaflet-popup .popup-info { color: #ececf1; }
+.leaflet-container a.leaflet-popup-close-button { color: #fff; z-index: 5; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.popup-img { height: 110px; background: var(--bg-surface) center/cover no-repeat; }
+.popup-body { padding: 12px 14px 14px; }
+.popup-body h4 { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+.popup-sub { font-size: 0.78rem; color: var(--brand-orange); font-weight: 700; margin-bottom: 8px; }
+.popup-info { font-size: 0.8rem; color: #d1d1d6; line-height: 1.45; margin-bottom: 3px; }
+.popup-actions { display: flex; gap: 8px; margin-top: 12px; }
+.popup-actions .btn-agenda { padding: 8px 12px; font-size: 0.78rem; flex: 1; justify-content: center; }
+.pin-icon svg { filter: drop-shadow(0 3px 4px rgba(0,0,0,0.5)); }
+
+/* ===== FOOTER ===== */
+.site-footer { background: var(--bg-card); border-top: 1px solid var(--border-subtle); padding: 48px 5% 20px; margin-top: 20px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+.footer-brand img { height: 110px; width: auto; max-width: 260px; object-fit: contain; display: block; margin-bottom: 16px; }
+.footer-brand p { font-size: 0.85rem; color: var(--text-muted); max-width: 320px; margin-bottom: 16px; line-height: 1.5; }
+.socials { display: flex; gap: 10px; }
+.social-btn {
+  width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid var(--border-subtle);
+  display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.18s;
+}
+.social-btn:hover { background: var(--brand-orange); border-color: var(--brand-orange); transform: translateY(-2px); }
+.social-btn svg { width: 20px; height: 20px; }
+.footer-links { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; justify-items: end; text-align: right; }
+.footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { color: #d1d1d6; text-decoration: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+.footer-links a:hover { color: var(--brand-orange); }
+.footer-bottom { max-width: 1100px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid var(--border-subtle); font-size: 0.76rem; color: var(--text-muted); text-align: center; }
+
+/* ===== Prolongement du hero (continuité de l'image vers le noir) ===== */
+#view-movie, #view-venue, .hero-view { position: relative; overflow: clip; }
+.movie-extend { --tint2: 15, 15, 18; position: relative; height: 0; z-index: 0; }
+.movie-extend-inner {
+  position: absolute; top: -320px; left: 0; right: 0; height: 1470px; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,.5) 52%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 30%, rgba(0,0,0,.5) 52%, transparent 100%);
+}
+.movie-extend-img {
+  position: absolute; top: -60px; left: -60px; width: calc(100% + 120px); height: calc(100% + 120px);
+  object-fit: cover; transform: scaleY(-1); filter: blur(46px) saturate(1.15);
+}
+.movie-extend-inner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(var(--tint2), .58) 0%, rgba(var(--tint2), .40) 40%, rgba(var(--tint2), .25) 100%); }
+.venue-hero { min-height: 64vh; padding-bottom: 70px; }
+#view-venue .catalog-container, #view-venue .venue-details-section { position: relative; z-index: 3; }
+
+/* ===== Séances spéciales ===== */
+.special-badge { display: inline-block; background: var(--sc); color: #fff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.card-badges { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.hero-badges { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.showtime-horizontal-card.special { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 16%, rgba(24,24,28,0.55)); }
+.showtime-horizontal-card.special .town-tag, .special-label { color: var(--sc); }
+.special-label { font-size: 0.72rem; font-weight: 800; }
+.practical-details-panel.special { border-color: var(--sc); background: color-mix(in srgb, var(--sc) 12%, rgba(24,24,28,0.55)); }
+
+/* ===== Divers ===== */
+.tarifs-grid .tarif-card:nth-child(2) { order: 3; }
+.tarifs-grid .tarif-card:nth-child(3) { order: 2; }
+.hero-slide { transform: translateX(var(--from, 0)); transition: opacity .7s ease, visibility .7s ease, transform .7s ease; }
+.hero-slide.active { transform: none; }
+.page-simple.hero-view { padding-top: 0; }
+.hero-view .page-wrap { position: relative; z-index: 3; padding-top: 10px; }
+.hero-view .page-title, .hero-view .page-wrap > .page-lead { display: none; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 10px 0 16px; max-width: 760px; }
+.kpi { background: rgba(24,24,28,.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; }
+.kpi strong { display: block; font-size: 1.5rem; font-weight: 900; color: var(--brand-orange); }
+.kpi span { font-size: .8rem; color: #d1d1d6; }
+.film-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 10px 0 16px; max-width: 860px; }
+.film-card { background: rgba(24,24,28,.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; }
+.film-card .fc-img { height: 150px; background: linear-gradient(135deg,#3a2a1a,#1c1c21) center/cover; display: flex; align-items: center; justify-content: center; font-size: 2.4rem; }
+.film-card div.fc-body { padding: 12px 14px; }
+.film-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+.film-card .fc-cycle { font-size: .75rem; color: var(--brand-orange); font-weight: 800; margin-bottom: 6px; }
+.film-card p { font-size: .82rem; color: #d1d1d6; line-height: 1.5; margin: 0; }
+.svc-icons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.svc { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); border-radius: 14px; padding: 5px 12px; font-size: .8rem; font-weight: 600; }
+.footer-help { max-width: 1100px; margin: 26px auto 0; padding-top: 18px; border-top: 1px solid var(--border-subtle); }
+.footer-help h4 { font-size: .9rem; font-weight: 800; margin-bottom: 10px; }
+.footer-help div { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.footer-help a { color: #d1d1d6; font-size: .82rem; cursor: pointer; text-decoration: none; }
+.footer-help a:hover { color: var(--brand-orange); }
+.cast-row { display: flex; gap: 14px; overflow-x: auto; margin: 12px 0 6px; padding-bottom: 4px; scrollbar-width: none; }
+.cast-item { flex: 0 0 auto; width: 66px; text-align: center; cursor: pointer; background: none; border: none; color: #fff; }
+.cast-photo { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,.18) center/cover; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 800; margin: 0 auto 4px; border: 1px solid rgba(255,255,255,.3); }
+.cast-name { font-size: .62rem; line-height: 1.15; opacity: .85; display: block; }
+.btn-note { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: 7px 14px; border-radius: 18px; font-size: .8rem; font-weight: 700; text-decoration: none; }
+.btn-note:hover { background: var(--brand-orange); border-color: var(--brand-orange); }
+.btn-note svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 10001; display: none; align-items: center; justify-content: center; padding: 18px; }
+.modal.open { display: flex; }
+.modal-box { background: #1c1c21; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 22px; position: relative; }
+.modal-box img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; float: left; margin: 0 16px 8px 0; }
+.modal-box h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 8px; }
+.modal-box p { font-size: .88rem; color: #d1d1d6; line-height: 1.6; margin-bottom: 10px; }
+.modal-close { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; }
+
+/* ===== v3 ===== */
+.page-simple.hero-view { padding-left: 0; padding-right: 0; }
+.hero-view .page-wrap { padding-left: 5%; padding-right: 5%; }
+.tarifs-grid .tarif-card:nth-child(1) { order: 1; }
+.tarifs-grid .tarif-card:nth-child(2) { order: 3; }
+.tarifs-grid .tarif-card:nth-child(3) { order: 2; }
+.tarifs-grid .tarif-card:nth-child(4) { order: 4; }
+.movie-extend-inner { -webkit-mask-image: none; mask-image: none; background: var(--field, rgb(var(--tint2))); }
+.movie-extend-img { display: none; }
+.movie-extend-inner::after { background: linear-gradient(180deg, rgba(var(--tint2), .55) 0%, rgba(var(--tint2), .72) 26%, rgba(var(--bg-dark-rgb), .93) 56%, var(--bg-dark) 86%); }
+.movie-hero::before { -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%); mask-image: linear-gradient(180deg, #000 50%, transparent 100%); }
+.map-btn { display: flex; align-items: center; justify-content: center; width: 130px; height: 62px; border-radius: 30px; border: 1px solid rgba(255,255,255,.3); text-decoration: none; overflow: hidden; transition: transform .18s; background: #e6e2d6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='62'%3E%3Crect width='130' height='62' fill='%23e6e2d6'/%3E%3Crect x='5' y='5' width='28' height='22' fill='%23cfe3c0'/%3E%3Crect x='100' y='38' width='24' height='18' fill='%23b9d9e8'/%3E%3Cpath d='M0 40L130 20' stroke='%23fff' stroke-width='6'/%3E%3Cpath d='M40 0L60 62' stroke='%23fff' stroke-width='5'/%3E%3Cpath d='M95 0L85 62' stroke='%23f3d99b' stroke-width='4'/%3E%3C/svg%3E") center/cover; }
+.map-btn:hover { transform: scale(1.04); }
+.map-btn .pin { font-size: 1.7rem; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+.addr { margin-top: 8px; font-size: .84rem; font-weight: 600; line-height: 1.4; }
+.lang-btn { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); color: #fff; border-radius: 22px; padding: 7px 12px; font-size: .78rem; font-weight: 800; cursor: pointer; flex-shrink: 0; }
+.lang-btn:hover { border-color: var(--brand-orange); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) { .logo-text { display: none !important; } }
+@media (max-width: 960px) {
+  .header-nav { display: none; }
+  .menu-burger-btn { display: block; margin-left: 2px; }
+}
+@media (max-width: 768px) {
+  header { padding: 12px 14px; }
+  .header-left { gap: 6px; }
+  .brand-logo-img { height: 36px; max-width: 120px; }
+  .header-center { gap: 6px; max-width: none; justify-content: center; }
+  .header-location-wrapper { display: none; }
+  .header-search-container { flex: 1; max-width: none; }
+  .header-search-input { padding: 11px 38px 11px 16px; font-size: 0.95rem; }
+  .search-btn-trigger { right: 2px; padding: 4px; }
+  .search-dropdown { position: fixed; top: 70px; left: 10px; right: 10px; width: auto; }
+  .salles-search .search-dropdown { position: absolute; top: 100%; left: 0; right: 0; width: auto; }
+  .hero-slide .badge-2k, .hero-slide .age-badge { display: none !important; }
+  .hero-slider-wrapper { min-height: 470px; height: auto; }
+  .hero-content { padding: 145px 5% 42px 5%; }
+  .hero-dots-indicator { left: 5%; }
+  .hero-arrow { display: none; }
+  .hero-arrow svg { width: 17px; height: 17px; }
+  .hero-arrow.prev { left: 6px; }
+  .hero-arrow.next { right: 6px; }
+  .movie-hero { min-height: 88vh; padding: 180px 5% 105px 5%; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
+  .movie-hero::after {
+    background: linear-gradient(180deg,
+      rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.45) 52%,
+      rgba(var(--tint2), 0.70) 76%, rgba(var(--tint2), 0) 100%);
+  }
+  .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
+  .btn-play-trailer {
+    width: auto; height: auto; border-radius: 20px; padding: 8px 16px; background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(8px); font-size: 0.82rem; font-weight: 600; gap: 8px; box-shadow: none;
+  }
+  .btn-play-trailer svg { width: 14px; height: 14px; margin-left: 0; }
+  .btn-play-trailer .mobile-trailer-text { display: inline; color: white; }
+  .btn-toggle-synopsis { display: inline-block; }
+  .synopsis-text.collapsed { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .showtimes-section { margin-top: -75px; padding-top: 15px; }
+  .venue-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-links { justify-items: start; text-align: left; }
+  .page-simple { padding-top: 100px; }
+}
+
+/* ===== v4 ===== */
+.hero-video { position: absolute; inset: 0; z-index: 1; overflow: hidden; opacity: 0; transition: opacity .8s; pointer-events: none; }
+.hero-video.playing { opacity: 1; }
+.hero-video iframe { position: absolute; top: 50%; left: 50%; width: 1920px; height: 1080px; max-width: none; transform: translate(-50%, -50%) scale(var(--vk, 1)); pointer-events: none; border: 0; }
+.hero-sound { position: absolute; right: 2%; bottom: 18px; z-index: 10; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.3); display: none; align-items: center; justify-content: center; cursor: pointer; color: #fff; }
+.hero-sound:hover { background: var(--brand-orange); border-color: var(--brand-orange); }
+.hero-sound svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero-top-badge { position: absolute; top: 82px; left: 84px; z-index: 10; background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.3); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 16px; font-size: .78rem; font-weight: 800; letter-spacing: .02em; }
+.hero-top-badge::before { content: "🎬 "; }
+.cast-role { display: block; font-size: .58rem; opacity: .6; line-height: 1.15; font-style: italic; }
+.cast-item { width: 74px; }
+.cast-row { max-width: 100%; }
+.mobile-only { display: none; }
+@keyframes fly { 0% { transform: translateY(0) rotate(0) scale(1); } 15% { transform: translateY(-4px) rotate(-5deg) scale(1.08,.92); } 30% { transform: translateY(-8px) rotate(4deg) scale(.94,1.08); } 45% { transform: translateY(-5px) rotate(-4deg) scale(1.08,.92); } 60% { transform: translateY(-9px) rotate(3deg) scale(.94,1.08); } 80% { transform: translateY(-3px) rotate(-2deg) scale(1.04,.96); } 100% { transform: translateY(0) rotate(0) scale(1); } }
+.brand-logo-img.fly { animation: fly 1.8s ease-in-out; }
+@media (max-width: 768px) {
+  .movie-hero-content { width: 100%; max-width: 100%; min-width: 0; }
+  .movie-title, .synopsis-text, .hero-title { overflow-wrap: anywhere; }
+  .movie-hero-img { height: 64%; object-position: 50% 20%; }
+  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, rgba(var(--tint2), 0) 100%); }
+  .desktop-only { display: none; }
+  .mobile-only { display: inline-flex; }
+  .trailer-btn-wrapper { flex-wrap: nowrap; gap: 10px; align-items: center; }
+  .trailer-btn-wrapper .btn-note { margin-top: 0; }
+  .hero-top-badge { left: 5%; top: 70px; }
+  .hero-sound { bottom: 14px; }
+}
+
+/* ===== v5 : charte Familles Rurales + hero d'accueil complet ===== */
+:root {
+  --fr-blue: #2fa1dc; --fr-green: #8cc63f; --fr-orange: #E88C1E;
+  --fr-line: linear-gradient(90deg, var(--fr-blue) 0%, var(--fr-green) 50%, var(--fr-orange) 100%);
+  --font-title: 'Myriad Pro', 'Source Sans 3', 'Inter', sans-serif;
+}
+h1, h2, h3, h4, .section-title, .card-title, .hero-title, .movie-title, .page-title, .tarif-price, .kpi strong, .panel-title, .nav-link, .logo-text, .btn-glass-slot, .btn-agenda, .btn-primary { font-family: var(--font-title); }
+.hero-title, .movie-title, .page-title { font-weight: 900; letter-spacing: -0.01em; }
+.has-logo img { display: block; max-width: min(460px, 82%); max-height: 140px; object-fit: contain; filter: drop-shadow(0 3px 12px rgba(0,0,0,.65)); }
+.hero-content .has-logo, .movie-hero-content .has-logo { margin-bottom: 12px; }
+
+/* Header : liseret FR translucide + barre de progression multicolore */
+.hdr-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--fr-line); opacity: .28; pointer-events: none; }
+.hdr-progress i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--fr-line); box-shadow: 0 0 8px rgba(47,161,220,.6); }
+.hdr-progress-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; pointer-events: none; }
+.hdr-progress-fill i { display: block; height: 100%; width: 0; background: var(--fr-line); }
+.nav-link { position: relative; }
+.nav-link.active { box-shadow: none; }
+.nav-link::after { content: ""; position: absolute; left: 6px; right: 6px; bottom: -3px; height: 3px; border-radius: 2px; background: var(--fr-line); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+.mobile-nav-overlay .nav-link::after { display: none; }
+.fr-logo { display: none; height: 34px; width: auto; flex-shrink: 0; opacity: .95; }
+@media (min-width: 1280px) { .fr-logo { display: block; } }
+@media (max-width: 1350px) { .logo-text { display: none !important; } }
+
+/* Touches de couleur */
+.section-title::after, .page-title::after { content: ""; display: block; width: 64px; height: 4px; border-radius: 2px; background: var(--fr-line); margin-top: 8px; }
+.tarif-card { border-top: 4px solid var(--fr-blue); }
+.tarif-card:nth-child(2) { border-top-color: var(--fr-orange); }
+.tarif-card:nth-child(3) { border-top-color: var(--fr-green); }
+.tarif-card:nth-child(1) .tarif-price { color: var(--fr-blue); }
+.tarif-card:nth-child(3) .tarif-price { color: var(--fr-green); }
+.kpi:nth-child(1) strong { color: var(--fr-blue); } .kpi:nth-child(2) strong { color: var(--fr-green); } .kpi:nth-child(3) strong { color: var(--fr-orange); }
+.film-card:nth-child(1) .fc-cycle { color: var(--fr-blue); } .film-card:nth-child(2) .fc-cycle { color: var(--fr-green); }
+.card-activite:nth-child(3n+1):hover { border-color: var(--fr-blue); } .card-activite:nth-child(3n+2):hover { border-color: var(--fr-green); }
+.card-movie:nth-child(3n+1):hover { border-color: var(--fr-blue); } .card-movie:nth-child(3n+2):hover { border-color: var(--fr-green); }
+.slots-label { color: var(--fr-green); }
+.prose h2 { color: var(--fr-blue); }
+.site-footer { border-top: 0; position: relative; background: linear-gradient(180deg, #14161c, #0f0f12); }
+.site-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--fr-line); opacity: .8; }
+.social-btn:hover { background: var(--fr-blue); border-color: var(--fr-blue); }
+.footer-links a:hover, .footer-help a:hover { color: var(--fr-green); }
+
+/* Hero d'accueil : vidéo entière sous le header, texte dessous */
+#heroWrapper { --hh: 64px; --mh: max(200px, min(56.25vw, calc(100vh - 64px - 150px))); display: grid; height: auto; min-height: 0; align-items: start; overflow: hidden; }
+#heroWrapper .hero-slide { position: relative; inset: auto; grid-area: 1 / 1; display: block; align-items: initial; }
+#heroWrapper .hero-media { position: absolute; top: var(--hh); left: 50%; transform: translateX(-50%); width: calc(var(--mh) * 1.7778); max-width: 100%; height: var(--mh); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%); }
+#heroWrapper .hero-bg-layer { inset: 0; width: 100%; height: 100%; transform: none; object-fit: cover; object-position: center; }
+#heroWrapper .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,0) 0, rgba(15,15,18,0) calc(var(--hh) + var(--mh) * .5), rgba(15,15,18,.75) calc(var(--hh) + var(--mh) * .85), var(--bg-dark) calc(var(--hh) + var(--mh) + 10px)); }
+#heroWrapper .hero-content { padding: calc(var(--hh) + var(--mh) - 70px) 84px 56px 84px; }
+#heroWrapper .hero-arrow { top: calc(var(--hh) + var(--mh) / 2); }
+#heroWrapper .hero-sound { bottom: auto; top: calc(var(--hh) + var(--mh) - 56px); }
+@media (max-width: 768px) {
+  #heroWrapper { --hh: 72px; --mh: 56.25vw; min-height: 0; }
+  #heroWrapper .hero-content { padding: calc(var(--hh) + var(--mh) - 40px) 5% 48px 5%; }
+  #heroWrapper .hero-media { width: 100%; }
+  #heroWrapper .hero-top-badge { top: calc(var(--hh) + 8px); }
+}
+</style>
+</head>
+
+<body class="page-accueil">
+
+<!-- LOADER -->
+<div id="app-loader">
+  <div class="spinner"></div>
+  <div style="font-size:0.85rem;font-weight:600;color:var(--text-muted);">Chargement du programme...</div>
+</div>
+<div id="page-transition-overlay"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-progress"></div><div class="hdr-progress-fill"><i id="hdrProgress"></i></div>
+  <div class="header-left">
+    <a onclick="goHome()" class="logo-container">
+      <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" class="brand-logo-img" fetchpriority="high">
+      <span class="logo-text">Cinémas itinérants Balad'images</span>
+    </a>
+  </div>
+
+  <div class="header-center">
+    <div class="header-location-wrapper">
+      <select class="header-location-select" id="locationSelect" onchange="handleLocationChange(this.value)">
+        <option value="all">Cinémas</option>
+      </select>
+      <span class="dropdown-icon">▼</span>
+    </div>
+    <div class="header-search-container" id="searchContainer">
+      <input type="text" class="header-search-input" id="searchInput" placeholder="Rechercher..." oninput="handleSearchInput(this.value)" onkeydown="if(event.key==='Enter'){triggerSearchExecution()}">
+      <button class="search-btn-trigger" id="searchBtnTrigger" onclick="triggerSearchExecution()" aria-label="Rechercher">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+      <div class="search-dropdown" id="searchDropdown"></div>
+    </div>
+  </div>
+
+  <nav class="header-nav">
+    <a onclick="go('home')" class="nav-link active" data-page="home">Accueil</a>
+    <a onclick="go('salles')" class="nav-link" data-page="salles">Nos salles</a>
+    <a onclick="go('activites')" class="nav-link" data-page="activites">Activités</a>
+    <a onclick="go('tarifs')" class="nav-link" data-page="tarifs">Tarifs</a>
+    <a onclick="go('apropos')" class="nav-link" data-page="apropos">À propos</a>
+    <a onclick="go('benevolat')" class="nav-link" data-page="benevolat">Bénévolat</a>
+  </nav>
+
+  <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Language">EN</button>
+  <img class="fr-logo" src="https://www.famillesrurales.org/sites/multisite.famillesrurales.org._www/files/styles/logo/public/logo_institutionnel_blanc2.png?itok=ON3WOdcm" alt="Familles Rurales" loading="lazy">
+  <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+</header>
+
+<!-- MENU MOBILE -->
+<div class="mobile-nav-overlay" id="mobileMenu">
+  <a class="nav-link" onclick="go('home')">Accueil</a>
+  <a class="nav-link" onclick="go('salles')">Nos salles</a>
+  <a class="nav-link" onclick="go('activites')">Activités</a>
+  <a class="nav-link" onclick="go('tarifs')">Tarifs</a>
+  <a class="nav-link" onclick="go('apropos')">À propos</a>
+  <a class="nav-link" onclick="go('benevolat')">Bénévolat</a>
+  <a class="nav-link" onclick="go('contact')">Nous contacter</a>
+</div>
+
+<!-- ===== VUE ACCUEIL ===== -->
+<div id="view-home" class="view-page active-view">
+  <div id="home-hero-container" style="position:relative;"></div>
+  <div class="catalog-container">
+    <div class="section-title" id="catalog-title">Toute la programmation réseau</div>
+    <div class="grid-movies" id="home-grid"></div>
+  </div>
+</div>
+
+<!-- ===== VUE FILM ===== -->
+<div id="view-movie" class="view-page">
+  <section class="movie-hero" id="movie-detail-hero"></section>
+  <div class="movie-extend" id="movieExtend"></div>
+  <section class="showtimes-section">
+    <div class="section-title">Prochaines projections</div>
+    <div class="horizontal-cards-strip" id="movie-showtimes-strip"></div>
+    <div class="practical-details-panel" id="details-panel"></div>
+  </section>
+</div>
+
+<!-- ===== VUE LIEU ===== -->
+<div id="view-venue" class="view-page">
+  <div id="venue-hero-container"></div>
+  <div class="catalog-container">
+    <div class="section-header">
+      <div class="section-title">Programmation à <span id="venue-page-title"></span></div>
+      <button class="btn-back-home" onclick="go('salles')">🗺️ Toutes nos salles</button>
+    </div>
+    <div class="grid-movies" id="venue-grid"></div>
+  </div>
+  <section class="venue-details-section">
+    <div class="venue-grid" id="venue-info-container"></div>
+  </section>
+</div>
+
+<!-- ===== NOS SALLES ===== -->
+<div id="view-salles" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Nos salles</h1>
+    <p class="page-lead">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</p>
+
+    <div class="salles-search">
+      <input type="text" id="sallesSearch" placeholder="Rechercher une commune..." autocomplete="off"
+             oninput="sallesSuggest(this.value)" onkeydown="if(event.key==='Enter'){sallesSearchGo()}">
+      <button class="btn-primary" onclick="sallesSearchGo()" style="padding:10px 18px;">Chercher</button>
+      <div class="search-dropdown" id="sallesSuggest"></div>
+    </div>
+    <div id="sallesResult"></div>
+    <div id="sallesMap"></div>
+    <div class="salles-note" id="sallesNote"></div>
+  </div>
+</div>
+
+<!-- ===== ACTIVITES ===== -->
+<div id="view-activites" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Activités</h1>
+    <p class="page-lead">Au-delà des séances en salle, Balad'Images propose d'autres dispositifs et rendez-vous cinéma.</p>
+    <div class="activites-grid" id="activites-grid"></div>
+  </div>
+</div>
+
+<div id="view-activite" class="view-page page-simple">
+  <div class="page-wrap">
+    <div style="margin-bottom:18px;"><button class="btn-back-home" onclick="go('activites')">← Toutes les activités</button></div>
+    <h1 class="page-title" id="activite-title"></h1>
+    <div class="prose" id="activite-content"></div>
+  </div>
+</div>
+
+<!-- ===== TARIFS ===== -->
+<div id="view-tarifs" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Tarifs</h1>
+    <p class="page-lead">Des places accessibles à tous, dans toutes nos salles.</p>
+    <div class="tarifs-grid">
+      <div class="tarif-card">
+        <h3>Tarif plein</h3>
+        <div class="tarif-price">6<small>€</small></div>
+        <ul><li>Adulte</li></ul>
+      </div>
+      <div class="tarif-card">
+        <h3>Tarif enfant adhérent</h3>
+        <div class="tarif-price">4<small>€</small></div>
+        <ul><li>Enfant de moins de 14 ans avec carte Familles Rurales à jour</li></ul>
+      </div>
+      <div class="tarif-card featured">
+        <h3>Tarif réduit</h3>
+        <div class="tarif-price">5<small>€</small></div>
+        <ul>
+          <li>Adulte adhérent Familles Rurales (carte à jour)</li>
+          <li>Demandeur d'emploi</li>
+          <li>Étudiant</li>
+          <li>Enfant de moins de 14 ans</li>
+        </ul>
+      </div>
+      <div class="tarif-card">
+        <h3>Tarif groupes</h3>
+        <div class="tarif-price">3,60<small>€</small></div>
+        <ul><li>Sur demande</li></ul>
+        <a class="btn-agenda" onclick="go('contact')" style="align-self:flex-start;margin-top:4px;">Nous contacter</a>
+      </div>
+    </div>
+    <div class="tarif-note">
+      Certaines séances (avant-premières, événements...) peuvent avoir un tarif spécifique : il est alors indiqué dans l'encart de la séance, sur la page du film.
+    </div>
+  </div>
+</div>
+
+<!-- ===== A PROPOS ===== -->
+<div id="view-apropos" class="view-page page-simple hero-view">
+  <div id="phero-apropos"></div>
+  <div class="page-wrap">
+    <h1 class="page-title">À propos</h1>
+    <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/APropos -->
+    <p class="page-lead">Balad'Images, le cinéma itinérant de Familles Rurales.</p>
+    <div class="prose">
+      <h2>Qui sommes-nous ?</h2>
+      <p>Balad'Images est le circuit de cinéma itinérant porté par Familles Rurales. Des séances de cinéma sont organisées au plus près des habitants, dans des salles de communes, par des associations locales Familles Rurales et leurs équipes de bénévoles.</p>
+      <p>Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.</p>
+      <h2>Notre projection</h2>
+      <p>Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.</p>
+      <h2>Fédération départementale Familles Rurales Maine et Loire, au service des territoires et des familles</h2>
+      <p><img src="https://fd.maine-et-loire.portail-defi.net/uploads/logo/5ecb915092eea_logo_fd49_quadri.png" alt="Familles Rurales Maine-et-Loire" style="height:80px;background:#fff;border-radius:10px;padding:8px;margin-bottom:8px;display:block;" loading="lazy"></p>
+      <p>Notre fédération accompagne et fédère les associations locales œuvrant en milieu rural. Nous développons des actions éducatives, sociales et culturelles, dont le cinéma itinérant Balad’Images, afin de favoriser l’accès aux services, à la culture et de renforcer la cohésion sociale sur l’ensemble du territoire.</p>
+      <p><a href="https://maine-et-loire.famillesrurales.org/90/notre-organisation-notre-accompagnement" target="_blank" rel="noopener noreferrer">En savoir + sur Familles Rurales</a></p>
+      <h2>Une question ?</h2>
+      <p><a onclick="go('contact')" style="cursor:pointer;">Écrivez-nous</a> : nous vous répondons du lundi au vendredi.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BENEVOLAT ===== -->
+<div id="view-benevolat" class="view-page page-simple hero-view">
+  <div id="phero-benevolat"></div>
+  <div class="page-wrap">
+    <h1 class="page-title">Bénévolat</h1>
+    <!-- TEXTE PROVISOIRE : à remplacer par le contenu de https://baladimages.spread.name/benevolat -->
+    <p class="page-lead">Rejoignez l'équipe de bénévoles de votre salle.</p>
+    <div class="prose">
+      <h2>Le cinéma près de chez vous repose sur des bénévoles</h2>
+      <p>Chaque séance Balad'Images est rendue possible par des bénévoles de l'association Familles Rurales locale. Vous aimez le cinéma, vous avez un peu de temps ? Vous pouvez nous aider, selon vos envies :</p>
+      <ul>
+        <li>accueil du public et billetterie</li>
+        <li>installation de la salle et du matériel de projection</li>
+        <li>communication locale (affiches, réseaux sociaux)</li>
+        <li>animation de la séance</li>
+      </ul>
+      <p>Les bénévoles sont accompagnés et formés par la fédération.</p>
+      <p><a class="btn-agenda filled" href="mailto:cinema49@famillesrurales.org?subject=Devenir%20b%C3%A9n%C3%A9vole" style="text-decoration:none;color:#fff;">Devenir bénévole</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PLEIN AIR ===== -->
+<div id="view-plein-air" class="view-page page-simple hero-view">
+  <div id="phero-plein-air"></div>
+  <div class="page-wrap">
+    <div class="prose">
+      <h2>Le Cinéma Plein air Balad’images</h2>
+      <p>Le cinéma plein air est l’animation par excellence des nuits d’été ! Dans une ambiance festive et conviviale, ce rendez-vous populaire est un évènement culturel pour un public familial. Il participe à renforcer le lien social, animer les communes et mettre en valeur les territoires.</p>
+      <p>Parce que le cinéma de plein air nécessite souvent des moyens financiers importants (2500€ à 3000€), nous mettons à disposition des associations du circuit Balad’Images mais aussi aux autres structures extérieures notre projecteur cinéma numérique permettant de réaliser une séance pour un coût réduit : généralement en dessous des 1250€, coût du film inclus.</p>
+      <p>La réglementation en vigueur autorise la diffusion en plein air des films de plus d’un an.</p>
+      <h2>Ce que nous effectuons</h2>
+      <ul>
+        <li>La relation avec les distributeurs.</li>
+        <li>L’obtention des droits de projection.</li>
+        <li>La mise à disposition du film.</li>
+        <li>L’obtention du film.</li>
+        <li>L’obtention des fichiers de déchiffrage du film “KDMs”.</li>
+        <li>La mise à disposition, à la carte, du projecteur cinéma numérique, ainsi que le système de sonorisation (2x 400W RMS et amplificateur basses 1200W RMS) et l’écran gonflable 10m / écran simple 8m.</li>
+      </ul>
+      <p>Concernant les déclarations auprès de la SACEM, nous laissons l’organisateur s’en charger, tandis que nous assurons la déclaration auprès du CNC (centre national du cinéma et de l’image animée).</p>
+      <p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Demande de devis – cinéma plein air')">Demander un devis</a></p>
+    </div>
+  </div>
+</div>
+
+<div id="view-aide" class="view-page page-simple">
+  <div class="page-wrap">
+    <div style="margin-bottom:18px;"><button class="btn-back-home" onclick="history.length&&go('home')">← Accueil</button></div>
+    <h1 class="page-title" id="aide-title"></h1>
+    <div class="prose" id="aide-content"></div>
+  </div>
+</div>
+
+<!-- ===== CONTACT ===== -->
+<div id="view-contact" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Nous contacter</h1>
+    <p class="page-lead">Une question, une demande de séance pour un groupe ? Écrivez-nous.</p>
+    <div class="contact-grid">
+      <div class="form-card">
+        <form onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="form-field"><label for="c-nom">Nom</label><input id="c-nom" type="text" required autocomplete="family-name"></div>
+            <div class="form-field"><label for="c-prenom">Prénom</label><input id="c-prenom" type="text" required autocomplete="given-name"></div>
+          </div>
+          <div class="form-field"><label for="c-email">Email</label><input id="c-email" type="email" required autocomplete="email"></div>
+          <div class="form-field"><label for="c-objet">Objet</label><input id="c-objet" type="text" required></div>
+          <div class="form-field"><label for="c-message">Message</label><textarea id="c-message" required></textarea></div>
+          <button type="submit" class="btn-primary">Envoyer</button>
+          <p class="form-hint">L'envoi ouvre votre application de messagerie avec le message prêt à partir. Voir les <a onclick="go('mentions')" style="cursor:pointer;text-decoration:underline;">mentions légales</a> pour l'usage de vos données.</p>
+        </form>
+      </div>
+      <div class="info-card">
+        <h3>Nos horaires</h3>
+        <p>Du lundi au vendredi<br><strong>9h30 – 17h</strong></p>
+        <h3>Notre adresse</h3>
+        <p>14 rue Savary<br>49100 Angers</p>
+        <iframe class="map-embed" loading="lazy" title="Carte : 14 rue Savary, 49100 Angers"
+          src="https://www.google.com/maps?q=14+rue+Savary+49100+Angers&output=embed"></iframe>
+        <p style="margin:12px 0 0;"><a class="btn-agenda" target="_blank" rel="noopener noreferrer"
+          href="https://www.google.com/maps/dir/?api=1&destination=14+rue+Savary+49100+Angers">Y aller</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MENTIONS LEGALES ===== -->
+<div id="view-mentions" class="view-page page-simple">
+  <div class="page-wrap">
+    <h1 class="page-title">Mentions légales</h1>
+    <div class="prose">
+      <h2>ÉDITEUR</h2>
+      <p>Responsable de la publication : Bernard GAZON<br>Téléphone : 02 41 18 20 00</p>
+      <h2>HÉBERGÉ PAR SPREADSIMPLE</h2>
+      <p><a href="https://spreadsimple.com/" target="_blank" rel="noopener noreferrer">https://spreadsimple.com/</a><br><a href="mailto:hi@spreadsimple.com">hi@spreadsimple.com</a></p>
+      <h2>SITE RÉALISÉ ET GÉRÉ PAR LA FÉDÉRATION FAMILLES RURALES DU MAINE ET LOIRE</h2>
+      <p>Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ<br>+33 2 41 18 20 00</p>
+      <h2>PROPRIÉTÉ</h2>
+      <p>Propriétaire du site : Familles Rurales<br>Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ<br>+33 2 41 18 20 00</p>
+      <h2>PROPRIÉTÉS INTELLECTUELLES</h2>
+      <p>Le propriétaire détient les droits de propriété intellectuelle ou détient les droits d’usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels.</p>
+      <p>Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable du propriétaire.</p>
+      <p>Toute exploitation non autorisée du site ou de l’un des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la Propriété Intellectuelle.</p>
+      <h2>LIENS HYPERTEXTES</h2>
+      <p>Ne pouvant vérifier l’ensemble des liens hypertextes pointant vers le site web, le propriétaire décline toute responsabilité concernant le contenu des sites liés à son Site.</p>
+      <h2>GESTION DES DONNÉES PERSONNELLES</h2>
+      <p>En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004, l’article L. 226-13 du Code pénal et la Directive Européenne du 24 octobre 1995.</p>
+      <p>À l’occasion de l’utilisation certaines données peuvent être recueillies : Origine géographique, page visite, temps resté sur la page…</p>
+      <p>En tout état de cause le site ne collecte des informations personnelles relatives à l’utilisateur que pour le besoin de certains services proposés. L’utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu’il procède par lui-même à leur saisie. Il est alors précisé à l’utilisateur l’obligation ou non de fournir ces informations.</p>
+      <h2>DROIT D’ACCÈS, DE RECTIFICATION ET D’OPPOSITION AUX DONNÉES</h2>
+      <p>Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, tout utilisateur dispose d’un droit d’accès, de rectification et d’opposition aux données personnelles le concernant, en effectuant sa demande à <a href="mailto:cinema49@famillesrurales.org">cinema49@famillesrurales.org</a>.</p>
+      <p>Aucune information personnelle de l’utilisateur n’est publiée à son insu, échangée, transférée, cédée ou vendue sur un support quelconque à des tiers.</p>
+      <h2>FORMULAIRES DE CONTACT</h2>
+      <p>Les informations recueillies sur ces formulaires sont enregistrées dans un email et sont conservées pendant 3 ans. Elles sont utilisées uniquement pour recontacter l’utilisateur et répondre à sa demande.</p>
+      <p>Conformément à la loi « informatique et libertés », vous pouvez exercer votre droit d’accès aux données vous concernant et les faire rectifier en contactant la fédération départementale familles rurales du Maine et Loire</p>
+      <h2>DROIT APPLICABLE ET ATTRIBUTION DE JURIDICTION</h2>
+      <p>Tout litige en relation avec l’utilisation du site est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de Paris.</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="personModal" onclick="if(event.target===this)this.classList.remove('open')"><div class="modal-box" id="personBox"></div></div>
+
+<!-- ===== FOOTER UNIVERSEL ===== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="https://raw.githubusercontent.com/cinemafdfr-cmyk/1/refs/heads/main/Flavicon%20Balad'images%20-%201%20(1).png" alt="Balad'Images" loading="lazy">
+      <p>Le cinéma itinérant Familles Rurales, au plus près de chez vous.</p>
+      <div class="socials" id="footer-socials"></div>
+    </div>
+    <div class="footer-links">
+      <ul>
+        <li><a onclick="go('home')">Accueil</a></li>
+        <li><a onclick="go('salles')">Nos salles</a></li>
+        <li><a onclick="go('activites')">Activités</a></li>
+        <li><a onclick="go('tarifs')">Tarifs</a></li>
+      </ul>
+      <ul>
+        <li><a onclick="go('apropos')">À propos</a></li>
+        <li><a onclick="go('benevolat')">Bénévolat</a></li>
+        <li><a onclick="go('contact')">Nous contacter</a></li>
+        <li><a onclick="go('mentions')">Mentions légales</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-help"><h4>Centre d'aide</h4><div id="footer-help"></div></div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire</div>
+</footer>
+
+<script>
+/* =========================================================
+   CONFIGURATION (à adapter facilement)
+   ========================================================= */
+const GOOGLE_SHEET_API_URL = window.BALAD_API;
+const CACHE_KEY = 'balad_data_cache_v2';
+const HERO_DELAY = 30000; // durée d'affichage de chaque film à l'affiche (ms)
+
+const SITE = {
+  email: 'cinema49@famillesrurales.org',
+  // Remplacez ces adresses par vos vraies pages de réseaux sociaux
+  socials: [
+    { nom: 'Facebook',  url: 'https://www.facebook.com/',  svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>' },
+    { nom: 'Instagram', url: 'https://www.instagram.com/', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>' },
+    { nom: 'YouTube',   url: 'https://www.youtube.com/',   svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>' }
+  ]
+};
+
+// Tarifs courts affichés dans l'encart de chaque séance
+const TARIFS_COURTS = [
+  { label: 'Plein tarif', prix: '6 €' },
+  { label: 'Tarif réduit', prix: '5 €' },
+  { label: 'Enfant adhérent -14 ans', prix: '4 €' },
+  { label: 'Groupes (sur demande)', prix: '3,60 €' }
+];
+
+// Sous-pages de "Activités" : à compléter
+const CNC = '<p><a href="https://www.cnc.fr/cinema/ma-classe-au-cinema" target="_blank" rel="noopener noreferrer">En savoir plus sur « Ma classe au cinéma » (CNC)</a></p>';
+const kp = (arr) => '<div class="kpis">' + arr.map(x => `<div class="kpi"><strong>${x[0]}</strong><span>${x[1]}</span></div>`).join('') + '</div>';
+const fiche = (k, com) => `<h2>Nos chiffres</h2>${kp(k)}<h2>Communes participantes</h2><p>${com}</p>`;
+const findPoster = (t) => { const f = db.films.find(x => norm(x.titre).includes(norm(t))); return f ? f.affiche_url : ''; };
+const filmCard = (t, cycle, ico, txt) => { const u = findPoster(t); return `<div class="film-card"><div class="fc-img" ${u ? `style="background-image:url('${esc(u)}')"` : ''}>${u ? '' : ico}</div><div class="fc-body"><h3>${t}</h3><div class="fc-cycle">${cycle}</div><p>${txt}</p></div></div>`; };
+const ACTIVITES = [
+  { id: 'ecole-cinema', ico: '🎒', titre: 'École et cinéma', resume: 'Le dispositif de l\'Éducation nationale pour les classes de la maternelle au CM2.',
+    contenu: () => `<p>« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.</p><p>Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.</p>${fiche([['14,5', 'séances par an'], ['1 418', 'spectateurs par an']], 'Doué-la-Fontaine, Longué-Jumelles, Pouancé, Tiercé')}${CNC}` },
+  { id: 'college-cinema', ico: '🎓', titre: 'Collège et cinéma', resume: 'Trois films par an pour les collégiens, projetés en salle.',
+    contenu: () => `<p>« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».</p>${fiche([['3,5', 'séances par an'], ['289', 'spectateurs par an']], 'Longué-Jumelles')}${CNC}` },
+  { id: 'lyceens', ico: '🎞️', titre: 'Lycéens au cinéma', resume: 'Le dispositif pour les lycéens en Pays de la Loire.',
+    contenu: () => `<p>« Lycéens au cinéma » propose aux lycéens des Pays de la Loire, dont le Maine-et-Loire, de découvrir des films en salle sur le temps scolaire, accompagnés par leurs enseignants. Il s'inscrit dans « Ma classe au cinéma ».</p><p>Chiffres Balad'Images : à compléter.</p>${CNC}` },
+  { id: 'cine-ecole', ico: '🦊', titre: 'Ciné-école', resume: 'Notre dispositif maison, avec une sélection locale de films.',
+    contenu: () => `<p>Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.</p><h2>Les films de cette année</h2><div class="film-cards">${filmCard('Fantastic Mr Fox', 'Cycle 3', '🦊', 'Un renard rusé, père de famille, ne peut s\'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d\'animation en volume plein d\'humour.')}${filmCard('Ponyo sur la falaise', 'Cycle 2', '🐟', 'Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.')}${filmCard('La Baleine et l\'escargote', 'Cycle 1', '🐋', 'Une petite escargote s\'accroche à la queue d\'une baleine pour voyager et découvrir le monde.')}</div>${fiche([['53,5', 'séances par an'], ['4 153', 'spectateurs par an']], 'Bécon-les-Granits, Chatelais, Corné, Gennes, Jallais, La Cornuaille, La Pouëze, Le Louroux Béconnais, Longué-Jumelles, Loué, Missillac, Noyant-Villages, Pouancé, Saint Clément-de-la-place, Saint Léger-de-Linières, Saint-Aubin-de-Luigné, Saint-Lyphard, Soulaire-et-Bourg, Tennie, Tiercé, Yzernay')}` },
+  { id: 'scolaires', ico: '🚌', titre: 'Séances scolaires', resume: 'Organisez une séance pour votre classe.',
+    contenu: () => `<p>Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.</p>${fiche([['25', 'séances par an'], ['1 884', 'spectateurs par an']], 'Beaumont-sur-Sarthe, Chemillé, La Chapelle-des-Marais, Longué-Jumelles, Loué, Missillac, Méral, Pouancé, Saint Gildas-des-bois, Saint-Lyphard, Saint-Ouen-en-Belin, Tiercé')}<p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Séance scolaire')">Nous contacter</a></p>` },
+  { id: 'plein-air', ico: '🌙', titre: 'Cinéma en plein air', resume: 'Des séances sous les étoiles, près de chez vous.', contenu: () => '' }
+];
+
+/* =========================================================
+   ETAT
+   ========================================================= */
+let db = { films: [], seances: [] };
+let previousView = 'view-home';
+let currentLieuId = null;
+let isSearchActive = false;
+let heroCarouselTimer = null;
+let heroCarouselIndex = 0;
+let heroFeaturedFilms = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const jsq = s => JSON.stringify(String(s)).replace(/"/g, '&quot;');
+const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+/* =========================================================
+   GOOGLE MAPS
+   ========================================================= */
+function sanitizeGoogleMapsUrl(rawUrl, queryFallback) {
+  if (rawUrl && typeof rawUrl === 'string') {
+    const url = rawUrl.trim();
+    if (url.includes('google.com/maps') || url.includes('maps.google.com')) return url;
+  }
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(queryFallback || '');
+}
+
+/* =========================================================
+   FORMATAGE
+   ========================================================= */
+function formatTime(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T')) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      let hours = d.getUTCHours();
+      let minutes = d.getUTCMinutes() + 10;
+      if (minutes >= 60) { minutes -= 60; hours += 1; }
+      if (hours >= 24) hours = 0;
+      return hours + 'h' + (minutes < 10 ? '0' : '') + minutes;
+    }
+  }
+  const m = str.match(/^(\d{1,2})[:h](\d{2})(?::\d{2})?$/);
+  if (m) {
+    let hours = parseInt(m[1], 10);
+    let minutes = parseInt(m[2], 10) + 10;
+    if (minutes >= 60) { minutes -= 60; hours += 1; }
+    if (hours >= 24) hours = 0;
+    return hours + 'h' + (minutes < 10 ? '0' : '') + minutes;
+  }
+  return str;
+}
+
+function formatDate(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T') && str.length > 20) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      const jours = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+      const mois = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+      return jours[d.getDay()] + ' ' + d.getDate() + ' ' + mois[d.getMonth()];
+    }
+  }
+  return str;
+}
+
+function formatYear(val) {
+  if (!val) return '';
+  let str = String(val).trim();
+  if (str.includes('T')) {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) return d.getFullYear();
+  }
+  const match = str.match(/\b(19|20)\d{2}\b/);
+  return match ? match[0] : str;
+}
+
+function specialStyle(type) {
+  const k = norm(type);
+  const map = [['avant', '#8b5cf6'], ['debat', '#3b82f6'], ['rencontre', '#3b82f6'], ['gouter', '#ec4899'], ['plein', '#22c55e'], ['scolaire', '#eab308'], ['ecole', '#eab308']];
+  for (const [w, c] of map) if (k.includes(w)) return c;
+  let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return `hsl(${h},70%,55%)`;
+}
+function filmSpecials(filmId) {
+  return [...new Set(db.seances.filter(s => String(s.id_film) === String(filmId) && String(s.type_special || '').trim()).map(s => String(s.type_special).trim()))];
+}
+function badgesHtml(filmId, cls) {
+  const l = filmSpecials(filmId);
+  return l.length ? `<div class="${cls}">` + l.slice(0, 2).map(t => `<span class="special-badge" style="--sc:${specialStyle(t)}">${esc(t)}</span>`).join('') + '</div>' : '';
+}
+
+function getCommune(seance) { return seance.lieu_id || seance.commune || seance.lieu_nom; }
+
+/* =========================================================
+   CHARGEMENT DES DONNEES (cache persistant + mise à jour en arrière-plan)
+   ========================================================= */
+function normalizeData(raw) {
+  const out = { films: [], seances: [] };
+  out.films = (raw.films || []).filter(f => f && f.titre && String(f.titre).trim() !== '');
+  out.films.forEach(f => {
+    f.id_film = String(f.id_film).trim();
+    f.duree = formatTime(f.duree) || f.duree;
+    f.annee = formatYear(f.annee);
+    f.realisateur = f.real || f.realisateur || '';
+    f.bande_annonce = f.trailer_url || f.bande_annonce || '';
+    f.synopsis_long = f.synopsis_long || f.synopsis_complet || '';
+  });
+  out.seances = (raw.seances || []).filter(s => s && s.id_film);
+  out.seances.forEach((s, idx) => {
+    s.id_film = String(s.id_film).trim();
+    s.horaire_texte = formatTime(s.horaire_texte) || s.horaire_texte;
+    s.date_texte = formatDate(s.date_texte) || s.date_texte;
+    if (!s.id_seance) s.id_seance = 'seance_' + idx;
+  });
+  return out;
+}
+
+function hideLoader() { const l = $('app-loader'); if (l) l.classList.add('hidden'); }
+
+async function loadDataFromSheet() {
+  let rendered = false;
+  let cachedStr = null;
+  try {
+    cachedStr = localStorage.getItem(CACHE_KEY);
+    if (cachedStr) {
+      const cached = JSON.parse(cachedStr);
+      if (cached && cached.films && cached.films.length) {
+        db = cached;
+        initAppUI();
+        rendered = true;
+        hideLoader();
+      }
+    }
+  } catch (e) { cachedStr = null; }
+
+  try {
+    const raw = await (window.__baladData || fetch(GOOGLE_SHEET_API_URL).then(r => r.json()));
+    if (!raw) throw new Error('Pas de données');
+    const fresh = normalizeData(raw);
+    const freshStr = JSON.stringify(fresh);
+    if (freshStr !== cachedStr) {
+      db = fresh;
+      try { localStorage.setItem(CACHE_KEY, freshStr); } catch (e) {}
+      if (rendered) refreshAfterUpdate(); else initAppUI();
+    }
+  } catch (error) {
+    console.error('Erreur de chargement Google Sheets:', error);
+    if (!db.films.length) {
+      $('home-grid').innerHTML = '<p style="color:red;">Erreur lors du chargement des films.</p>';
+    }
+  } finally {
+    hideLoader();
+  }
+}
+
+function initAppUI() {
+  populateLocationDropdown();
+  setupHeroCarousel();
+  renderGridMovies(db.films, 'home-grid');
+  sallesDirty = true;
+}
+
+function refreshAfterUpdate() {
+  populateLocationDropdown();
+  setupHeroCarousel();
+  if (!isSearchActive && $('catalog-title').textContent.indexOf('Résultats') !== 0) renderGridMovies(db.films, 'home-grid');
+  sallesDirty = true;
+}
+
+/* =========================================================
+   LOCATIONS
+   ========================================================= */
+function populateLocationDropdown() {
+  const select = $('locationSelect');
+  select.innerHTML = '<option value="all">Cinémas</option>';
+  const seen = new Set();
+  db.seances.forEach(s => {
+    const id = getCommune(s);
+    if (id && !seen.has(id)) {
+      seen.add(id);
+      select.insertAdjacentHTML('beforeend', '<option value="' + esc(id) + '">' + esc(id) + '</option>');
+    }
+  });
+}
+
+/* =========================================================
+   HERO CAROUSEL
+   ========================================================= */
+const ARROW_L = '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>';
+const ARROW_R = '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>';
+
+function setupHeroCarousel() {
+  if (!db.films || !db.films.length) return;
+  const withTrailer = db.films.filter(f => ytId(f.bande_annonce) && !heroFailed[ytId(f.bande_annonce)]);
+  heroFeaturedFilms = [...(withTrailer.length ? withTrailer : db.films)].sort(() => 0.5 - Math.random()).slice(0, 5);
+  heroCarouselIndex = 0;
+  renderHeroCarouselContainer();
+  startHeroAutoPlay();
+}
+
+function loadHeroImage(index) {
+  const img = document.querySelector('#hero-slide-' + index + ' img[data-src]');
+  if (img) { img.src = img.dataset.src; img.removeAttribute('data-src'); }
+}
+
+function renderHeroCarouselContainer() {
+  const container = $('home-hero-container');
+  if (!container || !heroFeaturedFilms.length) return;
+  const isMobile = window.innerWidth <= 768;
+
+  const slidesHtml = heroFeaturedFilms.map((movie, index) => {
+    const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
+    const maxSlots = isMobile ? 1 : 3;
+    let slotsHtml = movieSeances.slice(0, maxSlots).map(s => `
+      <a onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')" class="btn-glass-slot">
+        ${getCommune(s)} - ${s.date_texte} à ${s.horaire_texte}
+      </a>`).join('');
+    if (movieSeances.length > maxSlots) {
+      slotsHtml += `
+      <a onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}')" class="btn-glass-slot" style="border-style:dashed;">
+        + ${movieSeances.length - maxSlots} séance(s)
+      </a>`;
+    }
+    const bg = movie.fond_url || movie.affiche_url || '';
+    // Seule la 1re image se charge tout de suite ; les autres arrivent ensuite
+    const imgAttrs = index === 0
+      ? `src="${bg}" fetchpriority="high"`
+      : `data-src="${bg}"`;
+    return `
+    <div class="hero-slide ${index === 0 ? 'active' : ''}" id="hero-slide-${index}" onclick="openMovieDetails('${movie.id_film}')">
+      <div class="hero-media"><img class="hero-bg-layer" alt="" decoding="async" ${imgAttrs}><div class="hero-video" id="hv-${index}"></div></div>
+      <div class="hero-overlay-gradient"></div>
+      <div class="hero-content">
+        ${badgesHtml(movie.id_film, 'hero-badges')}${titleHtml(movie, 'hero-title')}
+        <div class="hero-meta">
+          <span>${movie.annee || ''}</span> • <span>${movie.duree}</span>
+          <span class="badge-2k">2K</span>
+          ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+        </div>
+        <p class="hero-synopsis" data-syn="${movie.id_film}">${movie.synopsis || ''}</p>
+        <div class="hero-slots-container">${slotsHtml}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const dotsHtml = heroFeaturedFilms.map((_, i) => `
+    <div class="dot-item ${i === 0 ? 'active' : ''}" id="hero-dot-${i}" onclick="event.stopPropagation(); setHeroSlide(${i}); startHeroAutoPlay();">
+      <div class="dot-item-fill"></div>
+    </div>`).join('');
+
+  container.innerHTML = `
+    <div class="hero-slider-wrapper" id="heroWrapper">
+      ${slidesHtml}
+      <div class="hero-top-badge">Films à l'affiche</div>
+      <button class="hero-sound" id="heroSound" onclick="toggleHeroSound(event)" aria-label="Activer le son"></button>
+      <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Film précédent">${ARROW_L}</button>
+      <button class="hero-arrow next" onclick="heroStep(1)" aria-label="Film suivant">${ARROW_R}</button>
+      <div class="hero-dots-indicator">${dotsHtml}</div>
+    </div>`;
+
+  heroCarouselIndex = 0;
+  activateHeroVideo(0);
+  if (LANG === 'en') applySynopsisLang(container);
+  // Balayage tactile
+  const wrapper = $('heroWrapper');
+  let touchX = null;
+  wrapper.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  wrapper.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 50) heroStep(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  // Chargement différé des 4 autres visuels après la 1re image (ou au bout de 1,5 s)
+  const first = wrapper.querySelector('#hero-slide-0 img');
+  let loadedOthers = false;
+  const loadOthers = () => {
+    if (loadedOthers) return;
+    loadedOthers = true;
+    for (let i = 1; i < heroFeaturedFilms.length; i++) loadHeroImage(i);
+  };
+  if (first) {
+    if (first.complete) loadOthers(); else first.addEventListener('load', loadOthers, { once: true });
+    setTimeout(loadOthers, 1500);
+  }
+}
+
+function heroStep(dir) {
+  if (!heroFeaturedFilms.length) return;
+  const n = heroFeaturedFilms.length;
+  setHeroSlide((heroCarouselIndex + dir + n) % n, dir);
+  startHeroAutoPlay();
+}
+
+function startHeroAutoPlay() {
+  clearInterval(heroCarouselTimer);
+  heroCarouselTimer = setInterval(() => {
+    setHeroSlide((heroCarouselIndex + 1) % heroFeaturedFilms.length);
+  }, HERO_DELAY);
+}
+
+function setHeroSlide(index, dir = 1) {
+  loadHeroImage(index);
+  document.querySelectorAll('.hero-slide').forEach((s, i) => {
+    if (i === index) {
+      s.style.transition = 'none'; s.style.setProperty('--from', (dir * 12) + '%'); void s.offsetWidth; s.style.transition = '';
+      s.classList.add('active');
+    } else {
+      if (s.classList.contains('active')) s.style.setProperty('--from', (-dir * 12) + '%');
+      s.classList.remove('active');
+    }
+  });
+  document.querySelectorAll('.dot-item').forEach((d, i) => {
+    if (i === index) { d.classList.remove('active'); void d.offsetWidth; d.classList.add('active'); }
+    else d.classList.remove('active');
+  });
+  heroCarouselIndex = index;
+  activateHeroVideo(index);
+}
+
+/* =========================================================
+   GRILLE FILMS
+   ========================================================= */
+function renderGridMovies(filmList, containerId) {
+  const container = $(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  if (!filmList.length) {
+    container.innerHTML = '<p style="color:var(--text-muted); grid-column:1/-1;">Aucun film trouvé.</p>';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  filmList.forEach((movie, mIndex) => {
+    const movieSeances = db.seances.filter(s => String(s.id_film) === String(movie.id_film));
+    let slotsListHtml = '';
+    const limit = 2;
+    movieSeances.forEach((s, idx) => {
+      const isHidden = idx >= limit;
+      slotsListHtml += `
+        <div class="slot-pill ${isHidden ? 'extra-slot-' + containerId + '-' + mIndex : ''}"
+             style="${isHidden ? 'display:none;' : ''}"
+             onclick="event.stopPropagation(); openMovieDetails('${movie.id_film}', '${s.id_seance}')">
+          <span class="town">${getCommune(s)}</span>
+          <span>${s.date_texte} à ${s.horaire_texte}</span>
+        </div>`;
+    });
+    let moreBtnHtml = '';
+    if (movieSeances.length > limit) {
+      const remaining = movieSeances.length - limit;
+      moreBtnHtml = `
+        <button class="btn-more-slots" id="btn-more-${containerId}-${mIndex}"
+                onclick="event.stopPropagation(); toggleExtraSlots('${containerId}', ${mIndex}, ${remaining})">
+          + ${remaining} autre(s) séance(s)
+        </button>`;
+    }
+    const card = document.createElement('div');
+    card.className = 'card-movie';
+    card.onclick = () => openMovieDetails(movie.id_film);
+    card.innerHTML = `
+      <div class="card-poster">
+        ${badgesHtml(movie.id_film, 'card-badges')}<img src="${movie.affiche_url}" alt="${esc(movie.titre)}" loading="lazy" decoding="async" fetchpriority="low"
+             onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">
+      </div>
+      <div class="card-content">
+        <div class="card-title">${movie.titre}</div>
+        <div class="card-meta">
+          <span>${movie.duree}</span> • <span>${movie.genre}</span>
+          <span class="badge-2k">2K</span>
+          ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+        </div>
+        <div class="card-slots-area">
+          <div class="slots-label">Prochaines séances :</div>
+          <div class="slots-list">${slotsListHtml}</div>
+          ${moreBtnHtml}
+        </div>
+      </div>`;
+    frag.appendChild(card);
+  });
+  container.appendChild(frag);
+}
+
+function toggleExtraSlots(prefix, movieIndex, count) {
+  const extraPills = document.querySelectorAll(`.extra-slot-${prefix}-${movieIndex}`);
+  const btn = $(`btn-more-${prefix}-${movieIndex}`);
+  let isCollapsed = false;
+  extraPills.forEach(el => {
+    if (el.style.display === 'none') el.style.display = 'flex';
+    else { el.style.display = 'none'; isCollapsed = true; }
+  });
+  if (btn) btn.textContent = isCollapsed ? `+ ${count} autre(s) séance(s)` : 'Voir moins';
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+function switchView(targetViewId, cb) {
+  const overlay = $('page-transition-overlay');
+  overlay.classList.add('active');
+  setTimeout(() => {
+    document.querySelectorAll('.view-page').forEach(el => el.classList.remove('active-view'));
+    const target = $(targetViewId);
+    if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
+    document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
+    if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
+
+    // Surbrillance du menu
+    let key = targetViewId.replace('view-', '');
+    if (key === 'activite') key = 'activites';
+    if (key === 'movie') key = 'home';
+    if (key === 'venue') key = 'salles';
+    document.querySelectorAll('.header-nav .nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === key));
+
+    const dd = $('searchDropdown');
+    if (dd) dd.classList.remove('open');
+    if (targetViewId !== 'view-home') stopHeroVideo();
+    if (cb) cb();
+    setTimeout(() => overlay.classList.remove('active'), 40);
+  }, 180);
+}
+
+function goHome() {
+  currentLieuId = null;
+  isSearchActive = false;
+  $('searchInput').value = '';
+  $('locationSelect').value = 'all';
+  $('catalog-title').textContent = 'Toute la programmation réseau';
+  $('mobileMenu').classList.remove('open');
+  switchView('view-home');
+  renderGridMovies(db.films, 'home-grid');
+  setTimeout(() => activateHeroVideo(heroCarouselIndex), 300);
+}
+
+/* Navigation générale : home, salles, activites, tarifs, apropos, benevolat, contact, mentions */
+function go(page) {
+  $('mobileMenu').classList.remove('open');
+  buildPageHero(page);
+  if (page === 'home') { goHome(); return; }
+  if (page === 'salles') { switchView('view-salles', initSalles); return; }
+  if (page === 'activites') { renderActivitesGrid(); switchView('view-activites'); return; }
+  switchView('view-' + page);
+}
+
+function handleLocationChange(val) {
+  if (val === 'all') goHome(); else openVenueDetails(val);
+}
+
+/* =========================================================
+   RECHERCHE FILMS
+   ========================================================= */
+const PAGES_SEARCH = [['tarifs', 'Tarifs'], ['salles', 'Nos salles'], ['apropos', 'À propos'], ['benevolat', 'Bénévolat'], ['contact', 'Nous contacter'], ['mentions', 'Mentions légales'], ['plein-air', 'Cinéma en plein air']];
+function handleSearchInput(val) {
+  const q = norm(val), dd = $('searchDropdown');
+  if (!q) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+  const it = [];
+  db.films.filter(f => norm(f.titre).includes(q)).slice(0, 5).forEach(f => it.push(['🎬', f.titre, `openMovieDetails('${f.id_film}')`, 'Film']));
+  [...new Set(db.seances.map(getCommune).filter(Boolean))].filter(c => norm(c).includes(q)).slice(0, 5).forEach(c => it.push(['📍', c, `openVenueDetails(${jsq(c)})`, 'Salle']));
+  ACTIVITES.filter(a => norm(a.titre + ' ' + a.resume).includes(q)).forEach(a => it.push([a.ico, a.titre, `openActivite('${a.id}')`, 'Dispositif']));
+  PAGES_SEARCH.filter(x => norm(x[1]).includes(q)).forEach(x => it.push(['📄', x[1], `go('${x[0]}')`, 'Page']));
+  HELP.filter(h => norm(h.q).includes(q)).forEach(h => it.push(['❓', h.q, `openHelp('${h.id}')`, 'Aide']));
+  dd.innerHTML = it.slice(0, 10).map(i => `<a class="search-dropdown-item" onclick="event.stopPropagation(); ${i[2]}; $('searchDropdown').classList.remove('open')">${i[0]} ${esc(i[1])} <small style="opacity:.55">· ${i[3]}</small></a>`).join('');
+  dd.classList.toggle('open', it.length > 0);
+}
+
+function triggerSearchExecution() {
+  const input = $('searchInput');
+  const q = input.value.toLowerCase().trim();
+  $('searchDropdown').classList.remove('open');
+  if (!q) return;
+  isSearchActive = true;
+  const filtered = db.films.filter(f =>
+    (f.titre && f.titre.toLowerCase().includes(q)) ||
+    (f.genre && f.genre.toLowerCase().includes(q)) ||
+    (f.casting && f.casting.toLowerCase().includes(q)));
+  const active = document.querySelector('.view-page.active-view');
+  if (!active || active.id !== 'view-home') switchView('view-home');
+  renderGridMovies(filtered, 'home-grid');
+  $('catalog-title').textContent = `Résultats de recherche pour "${q}"`;
+  $('home-grid').scrollIntoView({ behavior: 'smooth' });
+  input.value = '';
+}
+
+document.addEventListener('click', e => {
+  const c = $('searchContainer');
+  if (c && !c.contains(e.target)) $('searchDropdown').classList.remove('open');
+  const sc = document.querySelector('.salles-search');
+  if (sc && !sc.contains(e.target)) $('sallesSuggest').classList.remove('open');
+});
+
+function toggleMenu() { $('mobileMenu').classList.toggle('open'); }
+
+/* =========================================================
+   COULEUR DOMINANTE (voile teinté du hero film)
+   ========================================================= */
+const tintCache = {};
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0; const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h /= 6;
+  }
+  return [h, s, l];
+}
+function hslToRgb(h, s, l) {
+  if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const f = t => {
+    if (t < 0) t += 1; if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  return [Math.round(f(h + 1 / 3) * 255), Math.round(f(h) * 255), Math.round(f(h - 1 / 3) * 255)];
+}
+
+function computeTint(imgEl) {
+  try {
+    const W = 48, H = 27;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(imgEl, 0, 0, W, H);
+    const d = ctx.getImageData(0, 0, W, H).data; // lève une erreur si l'image est "tainted" (CORS)
+    let r = 0, g = 0, b = 0, ws = 0, tl = 0, tn = 0;
+    const ca = Array.from({ length: 8 }, () => [0, 0, 0, 0]);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        const R = d[i], G = d[i + 1], B = d[i + 2];
+        const mx = Math.max(R, G, B), mn = Math.min(R, G, B);
+        const sat = mx ? (mx - mn) / mx : 0;
+        const lum = (R + G + B) / 3;
+        if (y < H * 0.14) { tl += lum; tn++; }
+        if (y >= H - 3) { const q = ca[Math.min(7, Math.floor(x / (W / 8)))]; q[0] += R; q[1] += G; q[2] += B; q[3]++; }
+        let w = 0.15 + sat * sat * 3;          // les couleurs saturées comptent davantage
+        if (lum < 20 || lum > 240) w *= 0.2;   // on ignore noirs et blancs purs
+        w *= 0.6 + (y / H) * 0.8;              // le bas de l'image compte davantage (zone du texte)
+        r += R * w; g += G * w; b += B * w; ws += w;
+      }
+    }
+    r /= ws; g /= ws; b /= ws;
+    const [h, s] = rgbToHsl(r, g, b);
+    // Teinte du voile : même couleur, très assombrie (assez pour garder la lisibilité)
+    const vs = s < 0.06 ? 0 : Math.min(s * 0.85, 0.55);
+    const vl = s < 0.06 ? 0.06 : 0.13;
+    const veil = hslToRgb(h, vs, vl);
+    const bg = [15, 15, 18];
+    const mid = veil.map((v, i) => Math.round((v + bg[i]) / 2));
+    return { t: veil.join(','), t2: mid.join(','), h: (Math.min(Math.max((tl / tn - 70) / 150, 0), 1) * 0.5).toFixed(2), f: 'linear-gradient(90deg,' + ca.map(c => `rgb(${Math.round(c[0] / c[3])},${Math.round(c[1] / c[3])},${Math.round(c[2] / c[3])})`).join(',') + ')' };
+  } catch (e) {
+    return null;
+  }
+}
+
+function setTint(heroSec, tint) {
+  if (!tint) return;
+  heroSec.style.setProperty('--tint', tint.t);
+  heroSec.style.setProperty('--tint2', tint.t2);
+  const ext = heroSec.nextElementSibling;
+  if (ext && ext.classList.contains('movie-extend')) { ext.style.setProperty('--tint2', tint.t2); if (tint.f) ext.style.setProperty('--field', tint.f); }
+  const h = document.querySelector('header');
+  if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
+}
+
+function attachTint(img, hero, url) {
+  if (!img) return;
+  document.querySelector('header').style.removeProperty('--hdr-dark');
+  if (tintCache[url]) { setTint(hero, tintCache[url]); return; }
+  let retried = false;
+  img.onload = () => { const t = computeTint(img); if (t) { tintCache[url] = t; setTint(hero, t); } };
+  img.onerror = () => { if (!retried) { retried = true; img.removeAttribute('crossorigin'); img.src = url; } };
+}
+
+/* =========================================================
+   OUVERTURE FILM
+   ========================================================= */
+function openMovieDetails(filmId, selectedSeanceId = null) {
+  const cleanId = String(filmId).trim();
+  const movie = db.films.find(f => String(f.id_film) === cleanId);
+  if (!movie) return;
+
+  $('searchInput').value = '';
+  previousView = (document.querySelector('.view-page.active-view') || {}).id || 'view-home';
+  switchView('view-movie');
+
+  const heroSec = $('movie-detail-hero');
+  const bgUrl = movie.fond_url || movie.affiche_url || '';
+  const fullSynopsisText = movie.synopsis_long || movie.synopsis || '';
+  const isMobile = window.innerWidth <= 768;
+  const backAction = isSearchActive ? 'goHome()' : `switchView('${previousView}')`;
+
+  // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
+  document.querySelector('header').style.removeProperty('--hdr-dark');
+  heroSec.style.setProperty('--tint', '15,15,18');
+  heroSec.style.setProperty('--tint2', '15,15,18');
+
+  heroSec.innerHTML = `
+    <img class="movie-hero-img" id="movieHeroImg" alt="" crossorigin="anonymous" decoding="async" fetchpriority="high" src="${bgUrl}">
+    <div class="movie-hero-content">
+      <div style="margin-bottom:18px;">
+        <button class="btn-back-home" onclick="${backAction}">← Retour</button>
+      </div>
+      ${badgesHtml(movie.id_film, 'hero-badges')}${titleHtml(movie, 'movie-title')}
+      <div class="movie-quick-meta">
+        <span>${movie.annee || ''}</span> • <span>${movie.duree}</span> • <span>${movie.genre}</span>
+        <span class="badge-2k">2K</span>
+        ${movie.age ? `<span class="age-badge">${movie.age}</span>` : ''}
+      </div>
+      <div class="synopsis-wrapper">
+        <span class="synopsis-text ${isMobile ? 'collapsed' : ''}" id="synopsisText" data-syn="${movie.id_film}">${isMobile ? (movie.synopsis || fullSynopsisText) : fullSynopsisText}</span>
+        <button class="btn-toggle-synopsis" id="synopsisToggleBtn" onclick="toggleSynopsis('${movie.id_film}')">Lire la suite</button>
+      </div>
+      <div class="cast-row" id="castRow"></div>
+      <a class="btn-note desktop-only" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
+      <div class="movie-credits-text" style="display:none">
+        ${movie.realisateur ? `<span class="credit-block"><strong>De</strong> ${movie.realisateur}</span>` : ''}
+        ${movie.casting ? `<span class="credit-block"><strong>Avec</strong> ${movie.casting}</span>` : ''}
+      </div>
+    </div>
+    ${true ? `
+      <div class="trailer-btn-wrapper">
+        <a id="trailerLink" href="${trailerFor(movie)}" target="_blank" rel="noopener noreferrer" class="btn-play-trailer" title="Voir la bande-annonce">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span class="mobile-trailer-text">Bande-annonce</span>
+        </a>
+        <a class="btn-note mobile-only" href="https://www.imdb.com/find/?q=${encodeURIComponent(movie.titre)}&s=tt&ttype=ft" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M7 22H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3m0 11V11l4-8a2 2 0 0 1 2 2v4h5.6a2 2 0 0 1 2 2.3l-1.2 7.4a2 2 0 0 1-2 1.7H7z"/></svg> Noter ce film</a>
+      </div>` : ''}`;
+
+  const extEl = $('movieExtend');
+  extEl.style.setProperty('--tint2', '15,15,18');
+  extEl.innerHTML = bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : '';
+  loadCast(movie);
+  upgradeTrailer(movie);
+  if (LANG === 'en') applySynopsisLang(heroSec);
+  const heroImg = $('movieHeroImg');
+  heroImg.addEventListener('load', async () => {
+    const faces = await detectFaces(heroImg, bgUrl);
+    window._focus = { img: heroImg, faces };
+    applyFocus(heroImg, faces);
+  });
+  if (tintCache[bgUrl]) {
+    setTint(heroSec, tintCache[bgUrl]);
+  } else {
+    let retried = false;
+    heroImg.onload = () => {
+      const t = computeTint(heroImg);
+      if (t) { tintCache[bgUrl] = t; setTint(heroSec, t); }
+    };
+    heroImg.onerror = () => {
+      // Le serveur de l'image n'autorise pas la lecture des pixels : on recharge l'image sans cette option
+      if (!retried) { retried = true; heroImg.removeAttribute('crossorigin'); heroImg.src = bgUrl; }
+    };
+  }
+
+  const movieSeances = db.seances.filter(s => String(s.id_film) === cleanId);
+  const strip = $('movie-showtimes-strip');
+  strip.innerHTML = '';
+
+  if (!movieSeances.length) {
+    strip.innerHTML = '<p style="color:var(--text-muted);">Aucune séance programmée pour ce film.</p>';
+    $('details-panel').innerHTML = '';
+    return;
+  }
+
+  movieSeances.forEach((s, idx) => {
+    const isActive = selectedSeanceId ? String(s.id_seance) === String(selectedSeanceId) : idx === 0;
+    const card = document.createElement('div');
+    card.className = `showtime-horizontal-card ${isActive ? 'active' : ''}`;
+    card.onclick = e => selectShowtime(e, s, movie);
+    const sp = String(s.type_special || '').trim();
+    if (sp) { card.style.setProperty('--sc', specialStyle(sp)); card.classList.add('special'); }
+    card.innerHTML = `
+      <div class="town-tag">${getCommune(s)}</div>
+      <div class="card-date">${s.date_texte}</div>
+      <div class="card-venue">${s.horaire_texte}</div>${sp ? `<div class="special-label">${esc(sp)}</div>` : ''}`;
+    strip.appendChild(card);
+    if (isActive) renderShowtimePanel(s, movie);
+  });
+
+  if (isMobile) {
+    setTimeout(() => {
+      const sec = document.querySelector('.showtimes-section');
+      /* hero visible : pas de défilement automatique */
+    }, 300);
+  }
+}
+
+function toggleSynopsis(filmId) {
+  const movie = db.films.find(f => String(f.id_film) === String(filmId));
+  if (!movie) return;
+  const synEl = $('synopsisText');
+  const btnEl = $('synopsisToggleBtn');
+  if (synEl.classList.contains('collapsed')) {
+    synEl.classList.remove('collapsed');
+    synEl.textContent = movie.synopsis_long || movie.synopsis || ''; synEl.dataset.fr = synEl.textContent; if (LANG === 'en') applySynopsisLang(synEl.parentNode);
+    btnEl.textContent = 'Réduire';
+  } else {
+    synEl.classList.add('collapsed');
+    synEl.textContent = movie.synopsis || ''; synEl.dataset.fr = synEl.textContent; if (LANG === 'en') applySynopsisLang(synEl.parentNode);
+    btnEl.textContent = 'Lire la suite';
+  }
+}
+
+/* =========================================================
+   SEANCE
+   ========================================================= */
+function selectShowtime(evt, seance, movie) {
+  document.querySelectorAll('.showtime-horizontal-card').forEach(c => c.classList.remove('active'));
+  if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+  const panel = $('details-panel');
+  panel.classList.add('changing');
+  setTimeout(() => {
+    renderShowtimePanel(seance, movie);
+    panel.classList.remove('changing');
+  }, 150);
+}
+
+/* Tarifs : si la colonne "tarif" est vide ou vaut "habituel" -> tarifs standards ;
+   sinon on affiche uniquement ce qui est écrit dans la colonne. */
+function tarifsHtml(seance) {
+  const t = String(seance.tarif == null ? '' : seance.tarif).trim();
+  if (t && norm(t) !== 'habituel') {
+    return `<div class="item-value">${esc(t).replace(/\n/g, '<br>')}</div>`;
+  }
+  return TARIFS_COURTS.map(x => `<div class="tarif-line"><span>${x.label}</span><span>${x.prix}</span></div>`).join('') +
+    `<a class="tarif-link" onclick="go('tarifs')">Voir le détail des tarifs</a>`;
+}
+
+function renderShowtimePanel(seance, movie) {
+  const lieuAffichage = seance.lieu_nom || getCommune(seance);
+  const mapsUrl = sanitizeGoogleMapsUrl(seance.google_maps_url, `${lieuAffichage} France`);
+  const mapsBadge = `
+    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="map-btn" aria-label="Ouvrir dans Google Maps"><span class="pin">📍</span></a><div class="addr">${lieuAffichage}</div>`;
+
+  const sp = String(seance.type_special || '').trim();
+  const dsp = String(seance.detail_special || '').trim();
+  const panelEl = $('details-panel');
+  panelEl.classList.toggle('special', !!sp);
+  if (sp) panelEl.style.setProperty('--sc', specialStyle(sp));
+  panelEl.innerHTML = `
+    <div class="panel-header">
+      <div class="panel-title">Séance à <span>${getCommune(seance)}</span> ${sp ? `<span class="special-badge" style="--sc:${specialStyle(sp)};color:#fff;margin-left:8px;">${esc(sp)}</span>` : ''}</div>
+      <div class="item-value">${seance.date_texte} à ${seance.horaire_texte}</div>
+    </div>
+    <div class="practical-grid">
+      <div class="practical-item">
+        <div class="item-label">Lieu & Adresse</div>
+        <div class="item-value" style="margin-top:4px;">${mapsBadge}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Tarifs</div>
+        <div>${tarifsHtml(seance)}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Services</div>
+        <div class="item-value">${seance.info_services || 'Projection numérique 2K'}</div>
+      </div>
+      <div class="practical-item">
+        <div class="item-label">Paiements</div>
+        <div class="item-value">${seance.info_paiement || 'CB, Espèces, Chèques'}</div>
+      </div>
+    </div>
+    ${dsp ? `<div class="practical-item" style="margin-bottom:16px;"><div class="item-label">Détail de la séance</div><div class="item-value">${esc(dsp).replace(/\n/g, '<br>')}</div></div>` : ''}
+    <div class="actions-row">
+      <a class="btn-agenda" onclick="openVenueDetails(${jsq(getCommune(seance))})">Voir la salle & infos</a>
+    </div>`;
+}
+
+/* =========================================================
+   LIEU
+   ========================================================= */
+function openVenueDetails(lieuId) {
+  currentLieuId = lieuId;
+  switchView('view-venue');
+  $('venue-page-title').textContent = lieuId;
+
+  const venueSeances = db.seances.filter(s => getCommune(s) === lieuId);
+  const firstSeance = venueSeances[0];
+  const salleNom = (firstSeance && (firstSeance.salle_lieu || firstSeance.lieu_nom)) || lieuId;
+  const mapsUrl = sanitizeGoogleMapsUrl(firstSeance && firstSeance.google_maps_url, `${salleNom} ${lieuId} France`);
+  const bgUrl = (firstSeance && firstSeance.salle_url) || '';
+  const filmIds = [...new Set(venueSeances.map(s => String(s.id_film)))];
+  const venueFilms = db.films.filter(f => filmIds.includes(String(f.id_film)));
+
+  const mapsBadge = `<a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="badge-salle">📍 ${salleNom}</a>`;
+
+  $('venue-hero-container').innerHTML = `
+    <section class="movie-hero venue-hero" id="venueHero">${bgUrl ? `<img class="movie-hero-img" id="venueHeroImg" alt="" crossorigin="anonymous" decoding="async" src="${bgUrl}">` : ''}
+      <div class="movie-hero-content">
+        <div style="margin-bottom:14px;">
+          <button class="btn-back-home" onclick="goHome()">← Retour à l'accueil</button>
+        </div>
+        ${mapsBadge}
+        <h1 class="hero-title">${lieuId}</h1>
+        <p class="hero-subtitle">Retrouvez la programmation Familles Rurales à ${lieuId}.</p>${servicesIcons(firstSeance)}
+      </div>
+    </section>
+    <div class="movie-extend">${bgUrl ? `<div class="movie-extend-inner"><img class="movie-extend-img" alt="" decoding="async" fetchpriority="low" src="${bgUrl}"></div>` : ''}</div>`;
+  attachTint($('venueHeroImg'), $('venueHero'), bgUrl);
+
+  renderGridMovies(venueFilms, 'venue-grid');
+
+  $('venue-info-container').innerHTML = `
+    <div class="venue-info-box">
+      <h3>Informations pratiques — ${lieuId}</h3>
+      <div class="info-item"><strong>Salle :</strong> ${salleNom}</div>
+      <div class="info-item"><strong>Réseau :</strong> Balad'Images (Familles Rurales)</div>
+      <div class="info-item"><strong>Services :</strong> ${(firstSeance && firstSeance.info_services) || 'Écran géant, Son Digital'}</div>
+      <div class="info-item"><strong>Paiement :</strong> ${(firstSeance && firstSeance.info_paiement) || 'CB, Espèces'}</div>
+      <div class="badge-pmr">♿ Accessibilité PMR garantie</div>
+    </div>`;
+}
+
+/* =========================================================
+   ACTIVITES
+   ========================================================= */
+function renderActivitesGrid() {
+  $('activites-grid').innerHTML = ACTIVITES.map(a => `
+    <div class="card-activite" onclick="openActivite('${a.id}')">
+      <div class="ico">${a.ico}</div>
+      <h3>${a.titre}</h3>
+      <p>${a.resume}</p>
+    </div>`).join('');
+}
+
+function openActivite(id) {
+  if (id === 'plein-air') { go('plein-air'); return; }
+  const a = ACTIVITES.find(x => x.id === id);
+  if (!a) return;
+  $('activite-title').textContent = a.titre;
+  $('activite-content').innerHTML = typeof a.contenu === 'function' ? a.contenu() : a.contenu;
+  switchView('view-activite');
+}
+
+/* =========================================================
+   CONTACT (mailto)
+   ========================================================= */
+function submitContact(e) {
+  e.preventDefault();
+  const nom = $('c-nom').value.trim();
+  const prenom = $('c-prenom').value.trim();
+  const email = $('c-email').value.trim();
+  const objet = $('c-objet').value.trim();
+  const message = $('c-message').value.trim();
+  const body = `Nom : ${nom}\nPrénom : ${prenom}\nEmail : ${email}\n\n${message}`;
+  window.location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent(objet) + '&body=' + encodeURIComponent(body);
+}
+
+/* =========================================================
+   NOS SALLES (carte OpenStreetMap via Leaflet, chargée à la demande)
+   ========================================================= */
+let sallesMap = null, sallesLayer = null, sallesMarkers = {}, sallesVenues = [];
+let sallesDirty = true, leafletPromise = null, searchMarker = null, sallesOrigin = null;
+
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (leafletPromise) return leafletPromise;
+  leafletPromise = new Promise((resolve, reject) => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css';
+    document.head.appendChild(css);
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    s.onload = resolve;
+    s.onerror = () => { leafletPromise = null; reject(); };
+    document.head.appendChild(s);
+  });
+  return leafletPromise;
+}
+
+// Accepte "47.4784, -0.5632", "47,4784 ; -0,5632", etc.
+function parseCoords(v) {
+  if (!v) return null;
+  const m = String(v).match(/-?\d+(?:[.,]\d+)?/g);
+  if (!m || m.length < 2) return null;
+  const lat = parseFloat(m[0].replace(',', '.'));
+  const lng = parseFloat(m[1].replace(',', '.'));
+  if (isNaN(lat) || isNaN(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return [lat, lng];
+}
+
+function buildVenues() {
+  const map = new Map();
+  db.seances.forEach(s => {
+    const id = getCommune(s);
+    if (!id) return;
+    let v = map.get(id);
+    if (!v) {
+      v = { id, nom: s.salle_lieu || s.lieu_nom || id, img: s.salle_url || '', adresse: s.adresse || '', coords: null, seances: [] };
+      map.set(id, v);
+    }
+    if (!v.coords) v.coords = parseCoords(s.coordonnees || s['coordonnées'] || s.coords);
+    if (!v.img && s.salle_url) v.img = s.salle_url;
+    if (!v.adresse && s.adresse) v.adresse = s.adresse;
+    v.seances.push(s);
+  });
+  return [...map.values()];
+}
+
+// Itinéraire Google Maps sans point de départ (l'utilisateur le choisit)
+function directionsUrl(v) {
+  const dest = v.adresse || (v.coords ? v.coords.join(',') : `${v.nom} ${v.id} France`);
+  return 'https://www.google.com/maps/dir/?api=1' + (sallesOrigin ? '&origin=' + encodeURIComponent(sallesOrigin) : '') + '&destination=' + encodeURIComponent(dest);
+}
+
+function openDirections(id) {
+  const v = sallesVenues.find(x => x.id === id);
+  if (v) window.open(directionsUrl(v), '_blank', 'noopener');
+}
+
+function popupHtml(v) {
+  const first = v.seances[0];
+  const film = first && db.films.find(f => String(f.id_film) === String(first.id_film));
+  const nbFilms = new Set(v.seances.map(s => String(s.id_film))).size;
+  const img = v.img ? `style="background-image:url('${esc(v.img)}')"` : '';
+  return `
+    <div class="popup-img" ${img}></div>
+    <div class="popup-body">
+      <h4>${esc(v.id)}</h4>
+      <div class="popup-sub">${esc(v.nom)}</div>
+      <div class="popup-info">🎬 ${nbFilms} film${nbFilms > 1 ? 's' : ''} à l'affiche</div>
+      ${first && film ? `<div class="popup-info">🕒 Prochaine séance : ${esc(first.date_texte)} à ${esc(first.horaire_texte)}</div>
+      <div class="popup-info">« ${esc(film.titre)} »</div>` : ''}
+      <div class="popup-actions">
+        <button class="btn-agenda" onclick="openVenueDetails(${jsq(v.id)})">En savoir plus</button>
+        <button class="btn-agenda filled" onclick="openDirections(${jsq(v.id)})">Y aller</button>
+      </div>
+    </div>`;
+}
+
+const PIN_SVG = '<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="4.6" fill="#fff"/></svg>';
+
+function drawSallesMarkers() {
+  sallesVenues = buildVenues();
+  sallesLayer.clearLayers();
+  sallesMarkers = {};
+  const icon = L.divIcon({ className: 'pin-icon', html: PIN_SVG, iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -38], tooltipAnchor: [0, -34] });
+  const pts = [];
+  let missing = 0;
+  sallesVenues.forEach(v => {
+    if (!v.coords) { missing++; return; }
+    const m = L.marker(v.coords, { icon, title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
+    m.bindTooltip(v.id, { direction: 'top' });
+    m.addTo(sallesLayer);
+    sallesMarkers[v.id] = m;
+    pts.push(v.coords);
+  });
+  if (pts.length) sallesMap.fitBounds(pts, { padding: [40, 40], maxZoom: 11 });
+  $('sallesNote').textContent = missing
+    ? `${missing} salle(s) sans coordonnées dans le tableau (colonne « coordonnees ») : elles n'apparaissent pas sur la carte.`
+    : '';
+  sallesDirty = false;
+}
+
+async function initSalles() {
+  sallesVenues = buildVenues();
+  const box = $('sallesMap');
+  try {
+    await loadLeaflet();
+  } catch (e) {
+    box.innerHTML = '<p style="padding:20px;color:var(--text-muted);">Impossible de charger la carte. Vérifiez votre connexion.</p>';
+    return;
+  }
+  if (!sallesMap) {
+    sallesMap = L.map('sallesMap', { scrollWheelZoom: false }).setView([47.45, -0.55], 9);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+    }).addTo(sallesMap);
+    sallesLayer = L.layerGroup().addTo(sallesMap);
+    sallesMap.on('focus', () => sallesMap.scrollWheelZoom.enable());
+    sallesMap.on('blur', () => sallesMap.scrollWheelZoom.disable());
+  }
+  if (sallesDirty) drawSallesMarkers();
+  setTimeout(() => sallesMap.invalidateSize(), 60);
+}
+
+function focusVenue(id) {
+  const m = sallesMarkers[id];
+  const v = sallesVenues.find(x => x.id === id);
+  if (!m || !sallesMap) {
+    $('sallesResult').innerHTML = `<div class="result-box">Cette salle n'a pas encore de coordonnées sur la carte. <a class="btn-mini" onclick="openVenueDetails(${jsq(id)})">Voir la page de la salle</a></div>`;
+    return;
+  }
+  sallesMap.flyTo(v.coords, 13, { duration: 0.8 });
+  setTimeout(() => m.openPopup(), 850);
+  $('sallesMap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function clearSallesResult() {
+  sallesOrigin = null;
+  $('sallesResult').innerHTML = '';
+  if (searchMarker && sallesMap) { sallesMap.removeLayer(searchMarker); searchMarker = null; }
+}
+
+function sallesSuggest(val) {
+  const q = norm(val);
+  const dd = $('sallesSuggest');
+  if (!q) { dd.classList.remove('open'); dd.innerHTML = ''; return; }
+  const matches = sallesVenues.filter(v => norm(v.id).includes(q) || norm(v.nom).includes(q)).slice(0, 6);
+  let html = matches.map(v => `<a class="search-dropdown-item" onclick="pickSalle(${jsq(v.id)})">📍 ${esc(v.id)}</a>`).join('');
+  if (q.length >= 2) html += `<a class="search-dropdown-item" onclick="sallesSearchGo(true)">🔎 Chercher « ${esc(val.trim())} » : 3 salles les plus proches</a>`;
+  dd.innerHTML = html;
+  dd.classList.add('open');
+}
+
+function pickSalle(id) {
+  $('sallesSuggest').classList.remove('open');
+  $('sallesSearch').value = id;
+  clearSallesResult();
+  focusVenue(id);
+}
+
+async function sallesSearchGo(forceNearest) {
+  const val = $('sallesSearch').value.trim();
+  $('sallesSuggest').classList.remove('open');
+  if (!val) return;
+  const q = norm(val);
+  if (!forceNearest) {
+    const exact = sallesVenues.find(v => norm(v.id) === q);
+    if (exact) { pickSalle(exact.id); return; }
+    const partial = sallesVenues.filter(v => norm(v.id).includes(q));
+    if (partial.length === 1) { pickSalle(partial[0].id); return; }
+  }
+  await nearestTo(val);
+}
+
+function haversine(a, b) {
+  const R = 6371, rad = x => x * Math.PI / 180;
+  const dLat = rad(b[0] - a[0]), dLng = rad(b[1] - a[1]);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+async function nearestTo(val) {
+  const res = $('sallesResult');
+  res.innerHTML = '<div class="result-box">Recherche de « ' + esc(val) + ' »...</div>';
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=fr&q=' + encodeURIComponent(val + ', France');
+    const data = await (await fetch(url, { headers: { 'Accept-Language': 'fr' } })).json();
+    if (!data || !data.length) {
+      res.innerHTML = '<div class="result-box">Commune introuvable. Essayez avec une autre orthographe.</div>';
+      return;
+    }
+    const here = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    sallesOrigin = here.join(','); // point de départ = la commune recherchée
+    const placed = sallesVenues.filter(v => v.coords).map(v => ({ v, d: haversine(here, v.coords) })).sort((a, b) => a.d - b.d).slice(0, 3);
+    if (!placed.length) {
+      res.innerHTML = '<div class="result-box">Aucune salle n\'a de coordonnées pour le moment.</div>';
+      return;
+    }
+    res.innerHTML = `
+      <div class="result-box">
+        <h3>Les 3 salles les plus proches de « ${esc(val)} »</h3>
+        ${placed.map(p => `
+          <div class="result-item">
+            <span><strong>${esc(p.v.id)}</strong> <span class="dist">à ${Math.round(p.d)} km</span></span>
+            <span class="result-actions">
+              <a class="btn-mini" onclick="focusVenue(${jsq(p.v.id)})">Voir sur la carte</a>
+              <a class="btn-mini" href="${directionsUrl(p.v)}" target="_blank" rel="noopener noreferrer">Y aller</a>
+            </span>
+          </div>`).join('')}
+      </div>`;
+    if (sallesMap) {
+      if (searchMarker) sallesMap.removeLayer(searchMarker);
+      searchMarker = L.circleMarker(here, { radius: 8, color: '#fff', weight: 2, fillColor: '#3b82f6', fillOpacity: 1 }).addTo(sallesMap).bindTooltip(val, { permanent: false });
+      sallesMap.fitBounds([here, ...placed.map(p => p.v.coords)], { padding: [50, 50], maxZoom: 12 });
+    }
+  } catch (e) {
+    res.innerHTML = '<div class="result-box">La recherche a échoué. Réessayez dans un instant.</div>';
+  }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+const PAGE_BG = {
+  'apropos': { url: 'https://www.architectes-pour-tous.fr/sites/cnoa/files/styles/max_2600x2600/public/2024-01/field_visuels/52777-3_tierce_cine_pax.webp?itok=X8MOU1JI', t: 'À propos', l: "Balad'Images, le cinéma itinérant de Familles Rurales." },
+  'benevolat': { url: 'https://i.spread.name/558b01e7-2c52-4f88-bc83-f68b35c8eb26_Sans-titre-_29_7-x-14-cm_-_2.png', t: 'Bénévolat', l: "Rejoignez l'équipe de bénévoles de votre salle." },
+  'plein-air': { url: 'https://i.spread.name/8317cb8a-9053-4562-98ef-709016bd7c7f_ChatGPT-Image-5-fevr_-2026_-17_32_30.png', t: 'Cinéma en plein air', l: 'Des séances sous les étoiles, près de chez vous.' }
+};
+function buildPageHero(key) {
+  const c = PAGE_BG[key], host = $('phero-' + key);
+  if (!c || !host) return;
+  host.innerHTML = `<section class="movie-hero venue-hero" id="ph-${key}"><img class="movie-hero-img" id="phi-${key}" alt="" crossorigin="anonymous" decoding="async" src="${c.url}"><div class="movie-hero-content"><h1 class="hero-title">${c.t}</h1><p class="hero-subtitle">${c.l}</p></div></section><div class="movie-extend"><div class="movie-extend-inner"><img class="movie-extend-img" alt="" src="${c.url}"></div></div>`;
+  attachTint($('phi-' + key), $('ph-' + key), c.url);
+}
+function goContact(obj) { go('contact'); setTimeout(() => { if (obj) $('c-objet').value = obj; }, 300); }
+
+const HELP = [
+  { id: 'tarifs', q: 'Quels sont les tarifs pour une place de cinéma ?', a: () => `<ul><li><strong>6 €</strong> : tarif plein (adulte)</li><li><strong>5 €</strong> : tarif réduit (adhérent Familles Rurales avec carte à jour, demandeur d'emploi, étudiant, enfant de moins de 14 ans)</li><li><strong>4 €</strong> : enfant de moins de 14 ans avec carte adhérent Familles Rurales à jour</li><li><strong>3,60 €</strong> : groupes, sur demande</li></ul><p>Certaines séances spéciales ont un tarif particulier, indiqué sur la fiche de la séance. <a onclick="go('tarifs')" style="cursor:pointer">Voir la page Tarifs</a>.</p>` },
+  { id: 'paiement', q: 'Comment payer en salle ?', a: () => `<p>Les moyens de paiement acceptés sont indiqués sur la fiche de chaque séance, rubrique « Paiements » (par exemple espèces, chèque, carte bancaire sur TPE). Ils peuvent varier d'une salle à l'autre : pensez à vérifier avant de venir.</p>` },
+  { id: 'contact', q: 'Comment nous contacter ?', a: () => `<p>Par e-mail : <a href="mailto:cinema49@famillesrurales.org">cinema49@famillesrurales.org</a>, ou via le formulaire de la page Contact.</p><p>Nous sommes joignables du lundi au vendredi, de 9h30 à 17h, au 14 rue Savary, 49100 Angers.</p><p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="go('contact')">Nous contacter</a></p>` },
+  { id: 'abonnements', q: 'Proposons-nous des abonnements ?', a: () => `<p>Non, nous ne proposons pas d'abonnement. En revanche, la carte d'adhérent Familles Rurales à jour donne droit au tarif réduit à chaque séance (et à 4 € pour les enfants de moins de 14 ans).</p><p>Pour les écoles, centres de loisirs et autres groupes, un tarif de 3,60 € par personne est possible sur demande : contactez-nous.</p>` },
+  { id: 'reservation', q: 'Peut-on réserver en ligne ?', a: () => `<p>Pas encore : la réservation en ligne n'est pas disponible. Les places se prennent sur place, le jour de la séance, et nous vous conseillons d'arriver un peu en avance.</p><p>Pour un groupe, contactez-nous avant la séance afin que nous puissions vous accueillir dans de bonnes conditions.</p>` },
+  { id: 'programmation', q: 'Comment recevoir la programmation régulièrement ?', a: () => `<p>Ajoutez le site sur votre écran d'accueil, comme une application :</p><ul><li><strong>iPhone / iPad (Safari)</strong> : touchez le bouton Partager, puis « Sur l'écran d'accueil ».</li><li><strong>Android (Chrome)</strong> : touchez le menu ⋮, puis « Ajouter à l'écran d'accueil » (ou « Installer l'application »).</li></ul><p>Nous allons prochainement recommencer à envoyer une newsletter. En attendant, vous pouvez nous écrire pour demander votre inscription.</p><p><a class="btn-agenda filled" style="text-decoration:none;color:#fff;cursor:pointer;" onclick="goContact('Inscription à la newsletter')">Demander mon inscription</a></p>` }
+];
+function openHelp(id) {
+  const h = HELP.find(x => x.id === id); if (!h) return;
+  $('aide-title').textContent = h.q; $('aide-content').innerHTML = h.a();
+  switchView('view-aide');
+}
+
+function servicesIcons(seance) {
+  const t = norm(((seance && seance.info_paiement) || '') + ' ' + ((seance && seance.info_services) || ''));
+  const L = [['buvette', '🥤', 'Buvette'], ['snack|popcorn|confiserie', '🍿', 'Snack'], ['tpe|carte bancaire|\\bcb\\b', '💳', 'TPE'], ['pmr|accessib|mobilite reduite', '♿', 'PMR'], ['especes', '💶', 'Espèces'], ['cheque', '🧾', 'Chèque']];
+  const h = L.filter(x => new RegExp(x[0]).test(t)).map(x => `<span class="svc">${x[1]} ${x[2]}</span>`).join('');
+  return h ? `<div class="svc-icons">${h}</div>` : '';
+}
+
+/* ---- Casting (portraits via Wikipédia) ---- */
+const personCache = {};
+async function wikiPerson(name) {
+  if (name in personCache) return personCache[name];
+  let out = null;
+  for (const lang of ['fr', 'en']) {
+    try {
+      const r = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name.replace(/ /g, '_'))}`);
+      if (!r.ok) continue;
+      const d = await r.json();
+      if (d.type === 'standard') { out = { photo: d.thumbnail && d.thumbnail.source, bio: d.extract, url: d.content_urls && d.content_urls.desktop.page }; break; }
+    } catch (e) {}
+  }
+  return (personCache[name] = out);
+}
+const tmdbCache = {};
+async function tmdbCredits(m) {
+  if (m.id_film in tmdbCache) return tmdbCache[m.id_film];
+  try {
+    const d = await (await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&language=fr-FR&query=${encodeURIComponent(m.titre)}${m.annee ? '&year=' + m.annee : ''}`)).json();
+    const id = d.results && d.results[0] && d.results[0].id;
+    if (!id) return (tmdbCache[m.id_film] = null);
+    return (tmdbCache[m.id_film] = await (await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${TMDB_KEY}&language=fr-FR`)).json());
+  } catch (e) { return null; }
+}
+function loadCast(movie) {
+  const row = $('castRow'); if (!row) return;
+  const dirs = String(movie.realisateur || '').split(/,| et /).map(x => x.trim()).filter(Boolean);
+  const names = [...new Set(dirs.concat(String(movie.casting || '').split(',').map(x => x.trim()).filter(Boolean)))].slice(0, 10);
+  // Personnages : colonne optionnelle "personnages" du Sheets, format « Acteur = Rôle ; Acteur = Rôle »
+  const roles = {};
+  String(movie.personnages || '').split(/[;\n]/).forEach(x => { const m = x.split(/[=:]/); if (m.length > 1) roles[norm(m[0])] = m.slice(1).join(':').trim(); });
+  row.innerHTML = names.map((n, i) => `<button class="cast-item" onclick="openPerson(${jsq(n)})"><div class="cast-photo" id="cp-${i}">${n.split(' ').map(w => w[0]).slice(0, 2).join('')}</div><span class="cast-name">${esc(n)}</span><span class="cast-role" id="cr-${i}">${dirs.includes(n) ? 'réal.' : esc(roles[norm(n)] || '')}</span></button>`).join('');
+  names.forEach(async (n, i) => { const p = await wikiPerson(n); const el = $('cp-' + i); if (p && p.photo && el) { el.style.backgroundImage = `url('${p.photo}')`; el.textContent = ''; } });
+  if (TMDB_KEY) tmdbCredits(movie).then(c => {
+    if (!c) return;
+    names.forEach((n, i) => {
+      const k = norm(n), a = (c.cast || []).find(x => norm(x.name) === k), pp = a || (c.crew || []).find(x => norm(x.name) === k);
+      const el = $('cp-' + i), rr = $('cr-' + i);
+      if (a && rr && !dirs.includes(n) && a.character) rr.textContent = a.character;
+      if (pp && pp.profile_path && el && !el.style.backgroundImage) { el.style.backgroundImage = `url('https://image.tmdb.org/t/p/w185${pp.profile_path}')`; el.textContent = ''; }
+    });
+  });
+}
+async function openPerson(name) {
+  const m = $('personModal'), b = $('personBox');
+  b.innerHTML = `<button class="modal-close" onclick="$('personModal').classList.remove('open')">×</button><h3>${esc(name)}</h3><p>Chargement...</p>`;
+  m.classList.add('open');
+  const p = await wikiPerson(name);
+  const imdb = 'https://www.imdb.com/find/?s=nm&q=' + encodeURIComponent(name);
+  b.innerHTML = `<button class="modal-close" onclick="$('personModal').classList.remove('open')">×</button>${p && p.photo ? `<img src="${p.photo}" alt="">` : ''}<h3>${esc(name)}</h3><p>${p && p.bio ? esc(p.bio) : 'Pas de biographie trouvée.'}</p><p style="clear:both"><a href="${p && p.url ? p.url : imdb}" target="_blank" rel="noopener noreferrer" style="color:var(--brand-orange)">Biographie et filmographie (Wikipédia)</a> · <a href="${imdb}" target="_blank" rel="noopener noreferrer" style="color:var(--brand-orange)">IMDb</a></p>`;
+}
+
+/* ---- Cadrage sur les visages (BlazeFace, chargé à la demande) ---- */
+let faceModelP = null;
+function loadFaceModel() {
+  if (faceModelP) return faceModelP;
+  faceModelP = new Promise((res, rej) => {
+    const a = document.createElement('script');
+    a.src = 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js';
+    a.onload = () => { const b = document.createElement('script'); b.src = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.1.0/dist/blazeface.min.js'; b.onload = () => blazeface.load().then(res, rej); b.onerror = rej; document.head.appendChild(b); };
+    a.onerror = rej; document.head.appendChild(a);
+  });
+  return faceModelP;
+}
+let faceCache = {}; try { faceCache = JSON.parse(localStorage.getItem('balad_face_v1') || '{}'); } catch (e) {}
+async function detectFaces(img, url) {
+  if (url in faceCache) return faceCache[url];
+  try {
+    const model = await loadFaceModel();
+    const c = document.createElement('canvas'), sc = Math.min(1, 640 / img.naturalWidth);
+    c.width = Math.round(img.naturalWidth * sc); c.height = Math.round(img.naturalHeight * sc);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const f = await model.estimateFaces(c, false);
+    const faces = f.filter(x => x.probability[0] > 0.8).map(x => ({ x0: x.topLeft[0] / c.width, y0: x.topLeft[1] / c.height, x1: x.bottomRight[0] / c.width, y1: x.bottomRight[1] / c.height }));
+    faceCache[url] = faces;
+    try { localStorage.setItem('balad_face_v1', JSON.stringify(faceCache)); } catch (e) {}
+    return faces;
+  } catch (e) { return null; }
+}
+function applyFocus(img, faces) {
+  if (!img || !img.naturalWidth || !faces || !faces.length) return;
+  const bw = img.clientWidth, bh = img.clientHeight, mob = window.innerWidth <= 768;
+  const s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight), iw = img.naturalWidth * s, ih = img.naturalHeight * s;
+  const u = { x0: Math.min(...faces.map(f => f.x0)), x1: Math.max(...faces.map(f => f.x1)), y0: Math.min(...faces.map(f => f.y0)), y1: Math.max(...faces.map(f => f.y1)) };
+  const big = faces.slice().sort((a, b) => (b.x1 - b.x0) * (b.y1 - b.y0) - (a.x1 - a.x0) * (a.y1 - a.y0))[0];
+  const f = (u.x1 - u.x0) < 0.65 ? u : big;
+  const fx = (f.x0 + f.x1) / 2, fy = (f.y0 + f.y1) / 2, top = f.y0 - (f.y1 - f.y0) * 0.7;
+  let offY = Math.min(Math.max(0, fy * ih - (mob ? 0.38 : 0.42) * bh), ih - bh);
+  offY = Math.max(0, Math.min(offY, top * ih - 0.12 * bh));
+  const offX = Math.min(Math.max(0, fx * iw - 0.5 * bw), iw - bw);
+  img.style.objectPosition = `${iw > bw ? offX / (iw - bw) * 100 : 50}% ${ih > bh ? offY / (ih - bh) * 100 : 50}%`;
+}
+window.addEventListener('resize', () => { if (window._focus) applyFocus(window._focus.img, window._focus.faces); });
+
+const TMDB_KEY = ''; // optionnel : clé gratuite TMDB pour retrouver automatiquement la bande-annonce
+function trailerFor(m) { return m.bande_annonce || 'https://www.youtube.com/results?search_query=' + encodeURIComponent(`${m.titre} ${m.annee || ''} bande annonce vf`); }
+async function upgradeTrailer(m) {
+  if (m.bande_annonce || !TMDB_KEY) return;
+  try {
+    const d = await (await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&language=fr-FR&query=${encodeURIComponent(m.titre)}${m.annee ? '&year=' + m.annee : ''}`)).json();
+    const id = d.results && d.results[0] && d.results[0].id; if (!id) return;
+    for (const lang of ['fr-FR', 'en-US']) {
+      const v = await (await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${TMDB_KEY}&language=${lang}`)).json();
+      const t = (v.results || []).find(x => x.site === 'YouTube' && x.type === 'Trailer');
+      if (t) { m.bande_annonce = 'https://www.youtube.com/watch?v=' + t.key; const a = $('trailerLink'); if (a) a.href = m.bande_annonce; return; }
+    }
+  } catch (e) {}
+}
+
+/* ================= VERSION ANGLAISE (EN/FR) ================= */
+const EN = {
+"Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
+"Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
+"Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
+"Films à l'affiche":"Now showing","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
+"Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
+"Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
+"Film":"Film","Salle":"Venue","Dispositif":"Programme","Page":"Page","Aide":"Help","Buvette":"Refreshments","Snack":"Snacks","TPE":"Card terminal","PMR":"Accessible","Espèces":"Cash","Chèque":"Cheque",
+"Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.":"Find all our screening venues. Click a pin to discover the venue, or search for your town: if it has no screenings, we show you the 3 nearest venues.",
+"Chercher":"Search","Rechercher une commune...":"Search for a town...","En savoir plus":"Learn more","Y aller":"Directions","Commune introuvable. Essayez avec une autre orthographe.":"Town not found. Try another spelling.","Voir sur la carte":"See on map","Voir la page de la salle":"See the venue page",
+"Au-delà des séances en salle, Balad'Images propose d'autres dispositifs et rendez-vous cinéma.":"Beyond screenings in our venues, Balad'Images offers other schemes and cinema events.",
+"Des places accessibles à tous, dans toutes nos salles.":"Affordable seats for everyone, in all our venues.","Tarif plein":"Full price","Adulte":"Adult","Tarif enfant adhérent":"Member child price","Enfant de moins de 14 ans avec carte Familles Rurales à jour":"Child under 14 with a valid Familles Rurales card","Adulte adhérent Familles Rurales (carte à jour)":"Adult Familles Rurales member (valid card)","Demandeur d'emploi":"Job seeker","Étudiant":"Student","Enfant de moins de 14 ans":"Child under 14","Tarif groupes":"Group price","Sur demande":"On request",
+"Certaines séances (avant-premières, événements...) peuvent avoir un tarif spécifique : il est alors indiqué dans l'encart de la séance, sur la page du film.":"Some screenings (previews, events...) may have a specific price: it is then shown in the screening box on the film page.",
+"Balad'Images, le cinéma itinérant de Familles Rurales.":"Balad'Images, the mobile cinema of Familles Rurales.","Qui sommes-nous ?":"Who are we?",
+"Balad'Images est le circuit de cinéma itinérant porté par Familles Rurales. Des séances de cinéma sont organisées au plus près des habitants, dans des salles de communes, par des associations locales Familles Rurales et leurs équipes de bénévoles.":"Balad'Images is the mobile cinema circuit run by Familles Rurales. Screenings are held close to residents, in town halls and village venues, by local Familles Rurales associations and their volunteer teams.",
+"Familles Rurales est un mouvement familial associatif et d'éducation populaire. Il rassemble des femmes et des hommes qui agissent au quotidien pour répondre aux besoins des familles dans leur milieu de vie.":"Familles Rurales is a family-oriented, community-based popular education movement. It brings together women and men who work every day to meet the needs of families where they live.",
+"Notre projection":"Our projection","Nous projetons en numérique 2K, avec un écran et un son de qualité, dans des salles accessibles aux personnes à mobilité réduite.":"We screen in 2K digital, with a quality screen and sound, in venues accessible to people with reduced mobility.",
+"Fédération départementale Familles Rurales Maine et Loire, au service des territoires et des familles":"Familles Rurales Maine-et-Loire departmental federation, serving territories and families",
+"Notre fédération accompagne et fédère les associations locales œuvrant en milieu rural. Nous développons des actions éducatives, sociales et culturelles, dont le cinéma itinérant Balad'Images, afin de favoriser l'accès aux services, à la culture et de renforcer la cohésion sociale sur l'ensemble du territoire.":"Our federation supports and unites local associations working in rural areas. We run educational, social and cultural initiatives, including the Balad'Images mobile cinema, to promote access to services and culture and strengthen social cohesion across the territory.",
+"En savoir + sur Familles Rurales":"Learn more about Familles Rurales","Une question ?":"A question?","Écrivez-nous":"Write to us",": nous vous répondons du lundi au vendredi.":": we reply Monday to Friday.",
+"Rejoignez l'équipe de bénévoles de votre salle.":"Join the volunteer team at your venue.","Le cinéma près de chez vous repose sur des bénévoles":"Cinema near you relies on volunteers",
+"Chaque séance Balad'Images est rendue possible par des bénévoles de l'association Familles Rurales locale. Vous aimez le cinéma, vous avez un peu de temps ? Vous pouvez nous aider, selon vos envies :":"Every Balad'Images screening is made possible by volunteers from the local Familles Rurales association. Love cinema and have a little time? You can help, as you wish:",
+"accueil du public et billetterie":"welcoming the audience and ticketing","installation de la salle et du matériel de projection":"setting up the room and projection equipment","communication locale (affiches, réseaux sociaux)":"local communication (posters, social media)","animation de la séance":"hosting the screening","Les bénévoles sont accompagnés et formés par la fédération.":"Volunteers are supported and trained by the federation.","Devenir bénévole":"Become a volunteer",
+"Cinéma en plein air":"Open-air cinema","Des séances sous les étoiles, près de chez vous.":"Screenings under the stars, close to home.","Demander un devis":"Request a quote",
+"Le Cinéma Plein air Balad'images":"Balad'images Open-Air Cinema",
+"Le cinéma plein air est l'animation par excellence des nuits d'été ! Dans une ambiance festive et conviviale, ce rendez-vous populaire est un évènement culturel pour un public familial. Il participe à renforcer le lien social, animer les communes et mettre en valeur les territoires.":"Open-air cinema is the summer night entertainment par excellence! In a festive, friendly atmosphere, this popular event is a cultural occasion for families. It helps strengthen social ties, bring towns to life and showcase local areas.",
+"Parce que le cinéma de plein air nécessite souvent des moyens financiers importants (2500€ à 3000€), nous mettons à disposition des associations du circuit Balad'Images mais aussi aux autres structures extérieures notre projecteur cinéma numérique permettant de réaliser une séance pour un coût réduit : généralement en dessous des 1250€, coût du film inclus.":"Because open-air cinema often requires significant funds (€2,500 to €3,000), we lend our digital cinema projector to associations of the Balad'Images circuit and to outside organisations, making a screening possible at a reduced cost: generally under €1,250, film included.",
+"La réglementation en vigueur autorise la diffusion en plein air des films de plus d'un an.":"Current regulations allow open-air screening of films that are more than one year old.","Ce que nous effectuons":"What we take care of",
+"La relation avec les distributeurs.":"Dealing with distributors.","L'obtention des droits de projection.":"Obtaining screening rights.","La mise à disposition du film.":"Providing the film.","L'obtention du film.":"Obtaining the film.","L'obtention des fichiers de déchiffrage du film “KDMs”.":"Obtaining the film's decryption files (“KDMs”).",
+"La mise à disposition, à la carte, du projecteur cinéma numérique, ainsi que le système de sonorisation (2x 400W RMS et amplificateur basses 1200W RMS) et l'écran gonflable 10m / écran simple 8m.":"Providing, à la carte, the digital cinema projector, the sound system (2x 400W RMS and 1200W RMS bass amplifier) and the 10m inflatable screen / 8m simple screen.",
+"Concernant les déclarations auprès de la SACEM, nous laissons l'organisateur s'en charger, tandis que nous assurons la déclaration auprès du CNC (centre national du cinéma et de l'image animée).":"The organiser handles the SACEM declarations, while we take care of the declaration to the CNC (French national centre for cinema and the moving image).",
+"Une question, une demande de séance pour un groupe ? Écrivez-nous.":"A question, or a screening request for a group? Write to us.","Nom":"Last name","Prénom":"First name","Email":"Email","Objet":"Subject","Message":"Message","Envoyer":"Send","Nos horaires":"Opening hours","Du lundi au vendredi":"Monday to Friday","9h30 – 17h":"9:30am – 5pm","Notre adresse":"Our address",
+"L'envoi ouvre votre application de messagerie avec le message prêt à partir. Voir les":"Sending opens your email app with the message ready to go. See the","mentions légales":"legal notice","pour l'usage de vos données.":"for how your data is used.",
+"Le cinéma itinérant Familles Rurales, au plus près de chez vous.":"The Familles Rurales mobile cinema, close to home.","Centre d'aide":"Help centre","Balad'Images – Familles Rurales Maine-et-Loire":"Balad'Images – Familles Rurales Maine-et-Loire",
+"Nos chiffres":"Our figures","Communes participantes":"Participating towns","séances par an":"screenings per year","spectateurs par an":"viewers per year","Les films de cette année":"This year's films",
+"École et cinéma":"École et cinéma (School and cinema)","Le dispositif de l'Éducation nationale pour les classes de la maternelle au CM2.":"The national education scheme for classes from nursery to year 6.",
+"« École et cinéma » fait partie du dispositif national « Ma classe au cinéma » de l'Éducation nationale. Chaque année, les classes participantes découvrent plusieurs films en salle, avec un travail préparatoire et prolongé en classe par les enseignants.":"“École et cinéma” is part of the national “Ma classe au cinéma” scheme run by the French education ministry. Each year, participating classes watch several films in a cinema, with preparation and follow-up work in class led by teachers.",
+"Balad'Images accueille ces séances dans ses salles, avec un tarif et un accueil adaptés aux écoles.":"Balad'Images hosts these screenings in its venues, with pricing and a welcome adapted to schools.",
+"Collège et cinéma":"Collège et cinéma (Middle school and cinema)","Trois films par an pour les collégiens, projetés en salle.":"Three films a year for middle-school pupils, shown in a cinema.",
+"« Collège et cinéma » permet aux élèves de collège de voir et d'analyser des films de référence dans une vraie salle de cinéma, en lien avec leurs professeurs. C'est l'un des dispositifs de « Ma classe au cinéma ».":"“Collège et cinéma” lets middle-school pupils watch and analyse landmark films in a real cinema, together with their teachers. It is one of the “Ma classe au cinéma” schemes.",
+"Lycéens au cinéma":"Lycéens au cinéma (High-school pupils at the cinema)","Le dispositif pour les lycéens en Pays de la Loire.":"The scheme for high-school pupils in the Pays de la Loire.",
+"« Lycéens au cinéma » propose aux lycéens des Pays de la Loire, dont le Maine-et-Loire, de découvrir des films en salle sur le temps scolaire, accompagnés par leurs enseignants. Il s'inscrit dans « Ma classe au cinéma ».":"“Lycéens au cinéma” lets high-school pupils in the Pays de la Loire, including Maine-et-Loire, discover films in a cinema during school time, guided by their teachers. It is part of “Ma classe au cinéma”.",
+"Chiffres Balad'Images : à compléter.":"Balad'Images figures: to be added.","En savoir plus sur « Ma classe au cinéma » (CNC)":"Learn more about “Ma classe au cinéma” (CNC)",
+"Ciné-école":"Ciné-école","Notre dispositif maison, avec une sélection locale de films.":"Our own scheme, with a local film selection.",
+"Ciné-école reprend le principe d'École et cinéma, avec une sélection locale et d'autres choix de films, pensée par notre équipe pour chaque cycle scolaire.":"Ciné-école follows the principle of École et cinéma, with a local selection and different film choices, designed by our team for each school cycle.",
+"Un renard rusé, père de famille, ne peut s'empêcher de dévaliser trois fermiers, qui décident de se venger. Un film d'animation en volume plein d'humour.":"A cunning fox and family man can't help raiding three farmers, who decide to take revenge. A funny stop-motion animated film.",
+"Ponyo, petite poisson rouge, rêve de devenir humaine après sa rencontre avec Sosuke, un petit garçon qui vit au bord de la mer.":"Ponyo, a little goldfish, dreams of becoming human after meeting Sosuke, a young boy who lives by the sea.",
+"Une petite escargote s'accroche à la queue d'une baleine pour voyager et découvrir le monde.":"A little snail hitches a ride on a whale's tail to travel and discover the world.",
+"Séances scolaires":"School screenings","Organisez une séance pour votre classe.":"Organise a screening for your class.","Enseignants, vous pouvez aussi organiser une séance pour votre classe en dehors des dispositifs, avec un film de votre choix.":"Teachers, you can also organise a screening for your class outside these schemes, with a film of your choice.",
+"Quels sont les tarifs pour une place de cinéma ?":"How much is a cinema ticket?","Comment payer en salle ?":"How can I pay at the venue?","Comment nous contacter ?":"How can I contact you?","Proposons-nous des abonnements ?":"Do you offer subscriptions?","Peut-on réserver en ligne ?":"Can I book online?","Comment recevoir la programmation régulièrement ?":"How can I get the programme regularly?",
+": tarif plein (adulte)":": full price (adult)",": tarif réduit (adhérent Familles Rurales avec carte à jour, demandeur d'emploi, étudiant, enfant de moins de 14 ans)":": reduced price (Familles Rurales member with a valid card, job seeker, student, child under 14)",": enfant de moins de 14 ans avec carte adhérent Familles Rurales à jour":": child under 14 with a valid Familles Rurales member card",": groupes, sur demande":": groups, on request",
+"Certaines séances spéciales ont un tarif particulier, indiqué sur la fiche de la séance.":"Some special screenings have their own price, shown on the screening page.","Voir la page Tarifs":"See the Prices page",
+"Les moyens de paiement acceptés sont indiqués sur la fiche de chaque séance, rubrique « Paiements » (par exemple espèces, chèque, carte bancaire sur TPE). Ils peuvent varier d'une salle à l'autre : pensez à vérifier avant de venir.":"Accepted payment methods are shown on each screening page under “Payment” (for example cash, cheque, card on a card terminal). They can vary from one venue to another: please check before you come.",
+"Par e-mail :":"By email:","ou via le formulaire de la page Contact.":"or through the form on the Contact page.","Nous sommes joignables du lundi au vendredi, de 9h30 à 17h, au 14 rue Savary, 49100 Angers.":"We can be reached Monday to Friday, 9:30am to 5pm, at 14 rue Savary, 49100 Angers.",
+"Non, nous ne proposons pas d'abonnement. En revanche, la carte d'adhérent Familles Rurales à jour donne droit au tarif réduit à chaque séance (et à 4 € pour les enfants de moins de 14 ans).":"No, we do not offer subscriptions. However, a valid Familles Rurales member card gives you the reduced price at every screening (and €4 for children under 14).",
+"Pour les écoles, centres de loisirs et autres groupes, un tarif de 3,60 € par personne est possible sur demande : contactez-nous.":"For schools, leisure centres and other groups, a price of €3.60 per person is available on request: contact us.",
+"Pas encore : la réservation en ligne n'est pas disponible. Les places se prennent sur place, le jour de la séance, et nous vous conseillons d'arriver un peu en avance.":"Not yet: online booking is not available. Tickets are bought on site on the day of the screening, and we recommend arriving a little early.",
+"Pour un groupe, contactez-nous avant la séance afin que nous puissions vous accueillir dans de bonnes conditions.":"For a group, contact us before the screening so we can welcome you properly.",
+"Ajoutez le site sur votre écran d'accueil, comme une application :":"Add the site to your home screen, like an app:","iPhone / iPad (Safari)":"iPhone / iPad (Safari)",": touchez le bouton Partager, puis « Sur l'écran d'accueil ».":": tap the Share button, then “Add to Home Screen”.","Android (Chrome)":"Android (Chrome)",": touchez le menu ⋮, puis « Ajouter à l'écran d'accueil » (ou « Installer l'application »).":": tap the ⋮ menu, then “Add to Home screen” (or “Install app”).",
+"Nous allons prochainement recommencer à envoyer une newsletter. En attendant, vous pouvez nous écrire pour demander votre inscription.":"We will soon start sending a newsletter again. In the meantime, you can write to us to ask to be signed up.","Demander mon inscription":"Request my sign-up",
+"ÉDITEUR":"PUBLISHER","Responsable de la publication : Bernard GAZON":"Publication manager: Bernard GAZON","Téléphone : 02 41 18 20 00":"Telephone: +33 2 41 18 20 00","HÉBERGÉ PAR SPREADSIMPLE":"HOSTED BY SPREADSIMPLE",
+"SITE RÉALISÉ ET GÉRÉ PAR LA FÉDÉRATION FAMILLES RURALES DU MAINE ET LOIRE":"SITE BUILT AND MANAGED BY THE FAMILLES RURALES MAINE-ET-LOIRE FEDERATION","Siège social : 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ":"Head office: 3 rue Charles Lacretelle, 49070 BEAUCOUZÉ",
+"PROPRIÉTÉ":"OWNERSHIP","Propriétaire du site : Familles Rurales":"Site owner: Familles Rurales","PROPRIÉTÉS INTELLECTUELLES":"INTELLECTUAL PROPERTY",
+"Le propriétaire détient les droits de propriété intellectuelle ou détient les droits d'usage sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes, sons, logiciels.":"The owner holds the intellectual property rights, or the right of use, over all elements accessible on the site, including texts, images, graphics, logo, icons, sounds and software.",
+"Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable du propriétaire.":"Any reproduction, representation, modification, publication or adaptation of all or part of the site's elements, by any means, is prohibited without the owner's prior written permission.",
+"Toute exploitation non autorisée du site ou de l'un des éléments qu'il contient sera considérée comme constitutive d'une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la Propriété Intellectuelle.":"Any unauthorised use of the site or of any of its elements will be considered an infringement and prosecuted in accordance with articles L.335-2 et seq. of the French Intellectual Property Code.",
+"LIENS HYPERTEXTES":"HYPERLINKS","Ne pouvant vérifier l'ensemble des liens hypertextes pointant vers le site web, le propriétaire décline toute responsabilité concernant le contenu des sites liés à son Site.":"As it cannot check all hyperlinks pointing to the website, the owner declines any responsibility for the content of sites linking to it.",
+"GESTION DES DONNÉES PERSONNELLES":"PERSONAL DATA MANAGEMENT",
+"En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, la loi n° 2004-801 du 6 août 2004, l'article L. 226-13 du Code pénal et la Directive Européenne du 24 octobre 1995.":"In France, personal data is protected in particular by law no. 78-87 of 6 January 1978, law no. 2004-801 of 6 August 2004, article L. 226-13 of the Criminal Code and the European Directive of 24 October 1995.",
+"À l'occasion de l'utilisation certaines données peuvent être recueillies : Origine géographique, page visite, temps resté sur la page…":"When using the site, some data may be collected: geographic origin, pages visited, time spent on a page…",
+"En tout état de cause le site ne collecte des informations personnelles relatives à l'utilisateur que pour le besoin de certains services proposés. L'utilisateur fournit ces informations en toute connaissance de cause, notamment lorsqu'il procède par lui-même à leur saisie. Il est alors précisé à l'utilisateur l'obligation ou non de fournir ces informations.":"In any case, the site only collects personal information about the user as needed for certain services offered. The user provides this information knowingly, in particular when entering it themselves. The user is then told whether or not providing it is mandatory.",
+"DROIT D'ACCÈS, DE RECTIFICATION ET D'OPPOSITION AUX DONNÉES":"RIGHT OF ACCESS, RECTIFICATION AND OBJECTION",
+"Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, tout utilisateur dispose d'un droit d'accès, de rectification et d'opposition aux données personnelles le concernant, en effectuant sa demande à":"In accordance with articles 38 et seq. of law 78-17 of 6 January 1978 on information technology, files and freedoms, every user has the right to access, rectify and object to personal data concerning them, by making a request to",
+"Aucune information personnelle de l'utilisateur n'est publiée à son insu, échangée, transférée, cédée ou vendue sur un support quelconque à des tiers.":"No personal information about the user is published without their knowledge, exchanged, transferred, assigned or sold to third parties on any medium.",
+"FORMULAIRES DE CONTACT":"CONTACT FORMS","Les informations recueillies sur ces formulaires sont enregistrées dans un email et sont conservées pendant 3 ans. Elles sont utilisées uniquement pour recontacter l'utilisateur et répondre à sa demande.":"Information collected through these forms is recorded in an email and kept for 3 years. It is used only to contact the user back and answer their request.",
+"Conformément à la loi « informatique et libertés », vous pouvez exercer votre droit d'accès aux données vous concernant et les faire rectifier en contactant la fédération départementale familles rurales du Maine et Loire":"In accordance with the French “Data Protection” law, you may exercise your right of access to your data and have it corrected by contacting the Familles Rurales Maine-et-Loire departmental federation.",
+"DROIT APPLICABLE ET ATTRIBUTION DE JURIDICTION":"APPLICABLE LAW AND JURISDICTION","Tout litige en relation avec l'utilisation du site est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de Paris.":"Any dispute relating to the use of the site is subject to French law. The competent courts of Paris have exclusive jurisdiction."
+};
+const EN_RX = [
+ [/^Retrouvez la programmation Familles Rurales à (.+)\.$/, 'Find the Familles Rurales programme in $1.'],
+ [/^\+ (\d+) autre\(s\) séance\(s\)$/, '+ $1 more screening(s)'], [/^\+ (\d+) séance\(s\)$/, '+ $1 screening(s)'],
+ [/^🎬 (\d+) films? à l'affiche$/, '🎬 $1 film(s) showing'], [/^🕒 Prochaine séance : (.+) à (\d+h\d+)$/, '🕒 Next screening: $1 at $2'],
+ [/^Les 3 salles les plus proches de « (.+) »$/, 'The 3 nearest venues to “$1”'], [/^à (\d+) km$/, '$1 km away'],
+ [/^Résultats de recherche pour "(.+)"$/, 'Search results for "$1"'], [/^(.*\d) à (\d{1,2}h\d{2})$/, '$1 at $2'],
+ [/^🔎 Chercher « (.+) » : 3 salles les plus proches$/, '🔎 Search “$1”: 3 nearest venues']
+];
+let LANG = 'fr', i18nBusy = false;
+const origTxt = new WeakMap();
+const normK = x => x.replace(/\s+/g, ' ').trim().replace(/[’]/g, "'");
+function enFor(k) { if (EN[k] !== undefined) return EN[k]; for (const [re, rep] of EN_RX) if (re.test(k)) return k.replace(re, rep); return null; }
+function translateTree(root) {
+  i18nBusy = true;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let n;
+  while ((n = w.nextNode())) nodes.push(n);
+  nodes.forEach(n => {
+    const par = n.parentNode; if (par && /^(SCRIPT|STYLE)$/.test(par.nodeName)) return;
+    if (LANG === 'en') {
+      const base = origTxt.has(n) ? origTxt.get(n) : n.nodeValue, k = normK(base); if (!k) return;
+      const t = enFor(k);
+      if (t !== null) { if (!origTxt.has(n)) origTxt.set(n, n.nodeValue); const nv = base.replace(base.trim(), () => t); if (n.nodeValue !== nv) n.nodeValue = nv; }
+    } else if (origTxt.has(n)) { n.nodeValue = origTxt.get(n); origTxt.delete(n); }
+  });
+  (root.querySelectorAll ? root : document).querySelectorAll('[placeholder]').forEach(el => {
+    if (!el.dataset.fr) el.dataset.fr = el.placeholder;
+    const t = LANG === 'en' ? enFor(normK(el.dataset.fr)) : null; el.placeholder = t !== null ? t : el.dataset.fr;
+  });
+  i18nBusy = false;
+}
+let i18nObs = null;
+function setLang(l) {
+  LANG = l; try { localStorage.setItem('balad_lang', l); } catch (e) {}
+  document.documentElement.lang = l; $('langBtn').textContent = l === 'en' ? 'FR' : 'EN';
+  if (l === 'en' && !i18nObs) {
+    i18nObs = new MutationObserver(ms => {
+      if (i18nBusy || LANG !== 'en') return;
+      ms.forEach(m => {
+        m.addedNodes.forEach(a => { if (a.nodeType === 1) translateTree(a); else if (a.parentNode) translateTree(a.parentNode); });
+        if (m.type === 'characterData' && m.target.parentNode) translateTree(m.target.parentNode);
+      });
+    });
+    i18nObs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+  translateTree(document.body);
+}
+function toggleLang() { setLang(LANG === 'fr' ? 'en' : 'fr'); applySynopsisLang(document); }
+
+/* ---- Trailers YouTube muets en hero d'accueil (lecteurs préchargés) ---- */
+let ytReady = null, heroPool = {}, heroFailed = (() => { try { return JSON.parse(localStorage.getItem('balad_ytfail') || '{}'); } catch (e) { return {}; } })(), heroSound = false, heroSuspended = false;
+const SPK_ON = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const SPK_OFF = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
+function loadYT() {
+  if (window.YT && YT.Player) return Promise.resolve();
+  if (ytReady) return ytReady;
+  ytReady = new Promise(res => {
+    const prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); };
+    const t = document.createElement('script'); t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t);
+  });
+  return ytReady;
+}
+function ytId(u) { const m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/|\/v\/)([\w-]{11})/); return m ? m[1] : null; }
+function sizeHeroVideos() {
+  document.querySelectorAll('.hero-video').forEach(h => h.style.setProperty('--vk', (Math.max(h.clientWidth / 1920, h.clientHeight / 1080) * 1.0).toFixed(4)));
+}
+function destroyHeroPlayer(i) {
+  const p = heroPool[i]; if (!p) return;
+  try { p.player.destroy(); } catch (e) {}
+  if (p.host) { p.host.classList.remove('playing'); p.host.innerHTML = ''; }
+  delete heroPool[i];
+}
+function failHero(i) { const p = heroPool[i]; if (p) { heroFailed[p.id] = true; try { localStorage.setItem('balad_ytfail', JSON.stringify(heroFailed)); } catch (e) {} } destroyHeroPlayer(i); updateSoundVisibility(); }
+function updateSoundBtn() { const b = $('heroSound'); if (b) b.innerHTML = heroSound ? SPK_ON : SPK_OFF; }
+function updateSoundVisibility() { const b = $('heroSound'); if (b) { const c = heroPool[heroCarouselIndex]; b.style.display = c && c.phase === 2 && !heroSuspended ? 'flex' : 'none'; updateSoundBtn(); } }
+function applySound(p) { try { if (heroSound) { p.player.unMute(); p.player.setVolume(80); } else p.player.mute(); } catch (e) {} }
+function createHeroPlayer(index) {
+  const movie = heroFeaturedFilms[index], id = movie && ytId(movie.bande_annonce), host = $('hv-' + index);
+  if (!id || !host || heroPool[index] || heroFailed[id]) return;
+  const iframe = document.createElement('iframe');
+  const origin = /^https?:/.test(location.protocol) ? '&origin=' + encodeURIComponent(location.origin) : '';
+  iframe.src = `https://www.youtube.com/embed/${id}?enablejsapi=1&autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&vq=hd1080${origin}`;
+  iframe.allow = 'autoplay; encrypted-media'; iframe.setAttribute('tabindex', '-1'); iframe.setAttribute('aria-hidden', 'true');
+  host.appendChild(iframe); sizeHeroVideos();
+  const p = { host, id, index, phase: 0, player: null };
+  heroPool[index] = p;
+  setTimeout(() => { if (heroPool[index] === p && p.phase < 2 && p.index === heroCarouselIndex) failHero(index); }, 20000);
+  p.player = new YT.Player(iframe, { events: {
+    onReady: e => { e.target.mute(); e.target.playVideo(); try { e.target.setPlaybackQuality('hd1080'); } catch (_) {} },
+    onError: () => failHero(index),
+    onStateChange: e => {
+      const st = e.data;
+      if (st === 1) {
+        try { e.target.setPlaybackQuality('hd1080'); } catch (_) {}
+        if (p.phase === 0) {
+          const d = e.target.getDuration();
+          if (d > 30) { p.phase = 1; e.target.seekTo(d * (0.35 + Math.random() * 0.2), true); } else p.phase = 2;
+        } else if (p.phase === 1) p.phase = 2;
+        if (p.phase === 2) {
+          if (p.index === heroCarouselIndex && !heroSuspended) { applySound(p); host.classList.add('playing'); updateSoundVisibility(); }
+          else { try { e.target.mute(); e.target.pauseVideo(); } catch (_) {} }
+        }
+      } else if (st === 0) {
+        e.target.seekTo(e.target.getDuration() * 0.35, true); e.target.playVideo();
+      } else if (st === 2 && p.phase === 2 && p.index === heroCarouselIndex && !heroSuspended) {
+        e.target.playVideo(); // reprise si le navigateur a mis la lecture en pause
+      }
+    }
+  } });
+}
+function stopHeroVideo() {
+  heroSuspended = true;
+  Object.values(heroPool).forEach(p => { p.host.classList.remove('playing'); try { p.player.pauseVideo(); } catch (e) {} });
+  const b = $('heroSound'); if (b) b.style.display = 'none';
+}
+function activateHeroVideo(index) {
+  const home = $('view-home');
+  if (!home || !home.classList.contains('active-view')) return;
+  heroSuspended = false;
+  Object.keys(heroPool).forEach(k => { if (!heroPool[k].host.isConnected) destroyHeroPlayer(k); });
+  loadYT().then(() => {
+    if (index !== heroCarouselIndex) return;
+    const n = heroFeaturedFilms.length, keep = [index, (index + 1) % n, (index - 1 + n) % n];
+    keep.forEach(createHeroPlayer);
+    Object.keys(heroPool).forEach(k => { if (!keep.includes(+k)) destroyHeroPlayer(k); });
+    Object.values(heroPool).forEach(p => {
+      if (p.index === index) {
+        p.host.classList.toggle('playing', p.phase === 2);
+        applySound(p); try { p.player.playVideo(); } catch (e) {}
+      } else {
+        p.host.classList.remove('playing');
+        if (p.phase === 2) { try { p.player.mute(); p.player.pauseVideo(); } catch (e) {} }
+      }
+    });
+    updateSoundVisibility();
+  }).catch(() => {});
+}
+function toggleHeroSound(ev) {
+  ev.stopPropagation(); ev.preventDefault();
+  heroSound = !heroSound;
+  const c = heroPool[heroCarouselIndex];
+  if (c && c.player) {
+    applySound(c); c.player.playVideo();
+    setTimeout(() => { try { if (c.player.getPlayerState() !== 1) c.player.playVideo(); } catch (e) {} }, 300);
+  }
+  updateSoundBtn();
+}
+
+/* ---- Traduction des synopsis (EN) ---- */
+let trCache = {}; try { trCache = JSON.parse(localStorage.getItem('balad_tr_v1') || '{}'); } catch (e) {}
+async function trEN(text) {
+  if (!text) return '';
+  if (trCache[text]) return trCache[text];
+  const parts = text.match(/[^.!?…]+[.!?…]*\s*/g) || [text], chunks = []; let cur = '';
+  parts.forEach(x => { if ((cur + x).length > 450) { if (cur) chunks.push(cur); cur = x; } else cur += x; });
+  if (cur) chunks.push(cur);
+  try {
+    const out = [];
+    for (const c of chunks) {
+      const d = await (await fetch('https://api.mymemory.translated.net/get?langpair=fr|en&q=' + encodeURIComponent(c))).json();
+      out.push(d && d.responseData && d.responseData.translatedText ? d.responseData.translatedText : c);
+    }
+    const t = out.join(' ').trim();
+    trCache[text] = t; try { localStorage.setItem('balad_tr_v1', JSON.stringify(trCache)); } catch (e) {}
+    return t;
+  } catch (e) { return text; }
+}
+function applySynopsisLang(root) {
+  (root || document).querySelectorAll('[data-syn]').forEach(async el => {
+    if (el.dataset.fr === undefined) el.dataset.fr = el.textContent;
+    if (LANG === 'en') { const t = await trEN(el.dataset.fr); if (LANG === 'en') el.textContent = t; }
+    else el.textContent = el.dataset.fr;
+  });
+}
+
+/* ---- Logo : petit vol au survol / clic ---- */
+(function () {
+  const lc = document.querySelector('.logo-container'), im = lc && lc.querySelector('img'); if (!im) return;
+  const fly = () => { im.classList.remove('fly'); void im.offsetWidth; im.classList.add('fly'); };
+  lc.addEventListener('mouseenter', fly); lc.addEventListener('click', fly);
+  im.addEventListener('animationend', () => im.classList.remove('fly'));
+})();
+
+/* ---- Titre : logo du film si disponible (colonne "logo"), sinon texte ---- */
+function titleHtml(movie, cls) {
+  const u = String(movie.logo || movie.logo_url || '').trim();
+  if (!/^https?:/i.test(u)) return `<h1 class="${cls}">${movie.titre}</h1>`;
+  return `<h1 class="${cls} has-logo"><img src="${esc(u)}" alt="${esc(movie.titre)}" onerror="this.parentNode.classList.remove('has-logo');this.replaceWith(document.createTextNode(this.alt))"></h1>`;
+}
+/* ---- Barre de progression du header ---- */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement, b = $('hdrProgress');
+  if (b) b.style.width = (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive: true });
+
+function initFooter() {
+  $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
+  $('footer-year').textContent = new Date().getFullYear();
+  $('footer-socials').innerHTML = SITE.socials.map(s =>
+    `<a class="social-btn" href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.nom}" title="${s.nom}">${s.svg}</a>`).join('');
+}
+
+/* =========================================================
+   RESIZE & INIT
+   ========================================================= */
+let lastMobile = window.innerWidth <= 768;
+window.addEventListener('resize', () => {
+  sizeHeroVideos();
+  const m = window.innerWidth <= 768;
+  if (m !== lastMobile) { lastMobile = m; const home = $('view-home'); if (home && home.classList.contains('active-view')) renderHeroCarouselContainer(); }
+});
+
+initFooter();
+loadDataFromSheet();
+try { if (localStorage.getItem('balad_lang') === 'en') setLang('en'); } catch (e) {}
+</script>
+</body>
+</html>
