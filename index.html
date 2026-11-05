@@ -13,6 +13,7 @@
 
 <!-- Démarre le téléchargement des données dès le début de la page (gain de temps au chargement) -->
 <script>
+  try { if (localStorage.getItem('balad_theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}
   window.BALAD_API = "https://script.google.com/macros/s/AKfycbyvOAA0UvHrkj5GxdMpmccKTbDWi5kDwuvlC9Jm9I8qrlf6P1Dcp-BRGklcBCBjrdH_JQ/exec";
   window.__baladData = fetch(window.BALAD_API).then(function (r) { return r.json(); }).catch(function () { return null; });
 </script>
@@ -226,7 +227,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
       rgba(var(--tint), 0.18) 72%, rgba(var(--tint), 0) 100%),
     linear-gradient(180deg,
       rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.42) 50%,
-      rgba(var(--tint2), 0.68) 76%, rgba(var(--tint2), 0) 100%);
+      rgba(var(--tint2), 0.72) 72%, var(--bg-dark) 100%);
 }
 .movie-hero-content { position: relative; z-index: 3; max-width: 720px; }
 .trailer-btn-wrapper { z-index: 3; display: flex; align-items: center; justify-content: center; margin: auto; flex-shrink: 0; }
@@ -558,7 +559,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero::after {
     background: linear-gradient(180deg,
       rgba(var(--tint), 0) 0%, rgba(var(--tint), 0.06) 28%, rgba(var(--tint), 0.45) 52%,
-      rgba(var(--tint2), 0.70) 76%, rgba(var(--tint2), 0) 100%);
+      rgba(var(--tint2), 0.72) 72%, var(--bg-dark) 100%);
   }
   .trailer-btn-wrapper { width: 100%; margin: 14px 0 0 0; justify-content: flex-start; }
   .btn-play-trailer {
@@ -597,7 +598,7 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
   .movie-hero-content { width: 100%; max-width: 100%; min-width: 0; }
   .movie-title, .synopsis-text, .hero-title { overflow-wrap: anywhere; }
   .movie-hero-img { height: 64%; object-position: 50% 20%; }
-  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, rgba(var(--tint2), 0) 100%); }
+  .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 62%, var(--bg-dark) 100%); }
   .desktop-only { display: none; }
   .mobile-only { display: inline-flex; }
   .trailer-btn-wrapper { flex-wrap: nowrap; gap: 10px; align-items: center; }
@@ -608,8 +609,8 @@ a.badge-salle:hover { background: rgba(255,255,255,0.28); border-color: var(--br
 
 /* ===== v5 : charte Familles Rurales + hero d'accueil complet ===== */
 :root {
-  --fr-blue: #2fa1dc; --fr-green: #8cc63f; --fr-orange: #E88C1E;
-  --fr-line: linear-gradient(90deg, var(--fr-blue) 0%, var(--fr-green) 50%, var(--fr-orange) 100%);
+  --fr-blue: #5985c8; --fr-green: #a9c93c; --fr-orange: #d99a30;
+  --fr-line: linear-gradient(90deg, #fdf26a 0.00% 7.69%, #f5b95a 7.69% 15.38%, #e48f3c 15.38% 23.08%, #e03a2e 23.08% 30.77%, #e63e78 30.77% 38.46%, #7b3f8c 38.46% 46.15%, #3a4fa3 46.15% 53.85%, #3e82c4 53.85% 61.54%, #84cdee 61.54% 69.23%, #8fbac0 69.23% 76.92%, #4aa598 76.92% 84.62%, #3a8128 84.62% 92.31%, #9bc24a 92.31% 100.00%);
   --font-title: 'Myriad Pro', 'Source Sans 3', 'Inter', sans-serif;
 }
 h1, h2, h3, h4, .section-title, .card-title, .hero-title, .movie-title, .page-title, .tarif-price, .kpi strong, .panel-title, .nav-link, .logo-text, .btn-glass-slot, .btn-agenda, .btn-primary { font-family: var(--font-title); }
@@ -633,37 +634,80 @@ h1, h2, h3, h4, .section-title, .card-title, .hero-title, .movie-title, .page-ti
 
 /* Touches de couleur */
 .section-title::after, .page-title::after { content: ""; display: block; width: 64px; height: 4px; border-radius: 2px; background: var(--fr-line); margin-top: 8px; }
-.tarif-card { border-top: 4px solid var(--fr-blue); }
-.tarif-card:nth-child(2) { border-top-color: var(--fr-orange); }
-.tarif-card:nth-child(3) { border-top-color: var(--fr-green); }
-.tarif-card:nth-child(1) .tarif-price { color: var(--fr-blue); }
-.tarif-card:nth-child(3) .tarif-price { color: var(--fr-green); }
-.kpi:nth-child(1) strong { color: var(--fr-blue); } .kpi:nth-child(2) strong { color: var(--fr-green); } .kpi:nth-child(3) strong { color: var(--fr-orange); }
-.film-card:nth-child(1) .fc-cycle { color: var(--fr-blue); } .film-card:nth-child(2) .fc-cycle { color: var(--fr-green); }
-.card-activite:nth-child(3n+1):hover { border-color: var(--fr-blue); } .card-activite:nth-child(3n+2):hover { border-color: var(--fr-green); }
 .card-movie:nth-child(3n+1):hover { border-color: var(--fr-blue); } .card-movie:nth-child(3n+2):hover { border-color: var(--fr-green); }
-.slots-label { color: var(--fr-green); }
-.prose h2 { color: var(--fr-blue); }
 .site-footer { border-top: 0; position: relative; background: linear-gradient(180deg, #14161c, #0f0f12); }
 .site-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--fr-line); opacity: .8; }
 .social-btn:hover { background: var(--fr-blue); border-color: var(--fr-blue); }
 .footer-links a:hover, .footer-help a:hover { color: var(--fr-green); }
 
-/* Hero d'accueil : vidéo entière sous le header, texte dessous */
-#heroWrapper { --hh: 64px; --mh: max(200px, min(56.25vw, calc(100vh - 64px - 150px))); display: grid; height: auto; min-height: 0; align-items: start; overflow: hidden; }
-#heroWrapper .hero-slide { position: relative; inset: auto; grid-area: 1 / 1; display: block; align-items: initial; }
-#heroWrapper .hero-media { position: absolute; top: var(--hh); left: 50%; transform: translateX(-50%); width: calc(var(--mh) * 1.7778); max-width: 100%; height: var(--mh); overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%); }
-#heroWrapper .hero-bg-layer { inset: 0; width: 100%; height: 100%; transform: none; object-fit: cover; object-position: center; }
-#heroWrapper .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,0) 0, rgba(15,15,18,0) calc(var(--hh) + var(--mh) * .5), rgba(15,15,18,.75) calc(var(--hh) + var(--mh) * .85), var(--bg-dark) calc(var(--hh) + var(--mh) + 10px)); }
-#heroWrapper .hero-content { padding: calc(var(--hh) + var(--mh) - 70px) 84px 56px 84px; }
-#heroWrapper .hero-arrow { top: calc(var(--hh) + var(--mh) / 2); }
-#heroWrapper .hero-sound { bottom: auto; top: calc(var(--hh) + var(--mh) - 56px); }
+
+/* ===== v6 ===== */
+.hdr-progress-fill i { background-size: 100vw 100%; }
+.slots-label { color: var(--fr-orange); }
+.page-title::after { background: var(--accent, var(--fr-blue)); }
+.view-page { --accent: var(--fr-blue); }
+#view-activites, #view-activite, #view-benevolat { --accent: var(--fr-green); }
+#view-salles, #view-contact, #view-plein-air { --accent: var(--fr-orange); }
+.prose h2, .prose a { color: var(--accent); }
+.tarif-card { border-top: 4px solid var(--accent); }
+.tarif-price, .kpi strong, .film-card .fc-cycle { color: var(--accent); }
+.tarif-card.featured { border-color: var(--accent); background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 14%, transparent), var(--bg-card) 60%); }
+.card-activite:hover { border-color: var(--accent); }
+.movie-extend { display: none !important; }
+.movie-hero { background: var(--bg-dark); }
+#view-movie .showtimes-section, #view-venue .catalog-container { background: linear-gradient(180deg, rgba(var(--tint2, 15, 15, 18), .22) 0, rgba(var(--bg-dark-rgb), 0) 460px); }
+
+/* Logo : les ailes battent, le corps bouge à peine */
+.logo-fly { position: relative; display: inline-block; line-height: 0; }
+.logo-fly .lp { position: absolute; left: 0; top: 0; visibility: hidden; }
+.logo-fly.flying .fb { visibility: hidden; }
+.logo-fly.flying .lp { visibility: visible; }
+.lp.l { clip-path: inset(0 64% 0 0); transform-origin: 36% 65%; }
+.lp.r { clip-path: inset(0 0 0 64%); transform-origin: 64% 65%; }
+.lp.b { clip-path: inset(0 36% 0 36%); }
+.logo-fly.flying .lp.l { animation: wingL .3s ease-in-out 6; }
+.logo-fly.flying .lp.r { animation: wingR .3s ease-in-out 6; }
+.logo-fly.flying .lp.b { animation: bodyB .6s ease-in-out 3; }
+@keyframes wingL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(17deg); } }
+@keyframes wingR { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-17deg); } }
+@keyframes bodyB { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.theme-btn { background: none; border: 1px solid var(--border-subtle); color: var(--text-muted); border-radius: 14px; padding: 4px 12px; font-size: .72rem; cursor: pointer; margin-left: 12px; }
+.theme-btn:hover { color: var(--brand-orange); border-color: var(--brand-orange); }
+
+/* Mobile : header en bas (accès au pouce) */
 @media (max-width: 768px) {
-  #heroWrapper { --hh: 72px; --mh: 56.25vw; min-height: 0; }
-  #heroWrapper .hero-content { padding: calc(var(--hh) + var(--mh) - 40px) 5% 48px 5%; }
-  #heroWrapper .hero-media { width: 100%; }
-  #heroWrapper .hero-top-badge { top: calc(var(--hh) + 8px); }
+  header { top: auto; bottom: 0; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(12,12,16,.94); }
+  .hdr-progress, .hdr-progress-fill { bottom: auto; top: 0; }
+  body { padding-bottom: 78px; }
+  .search-dropdown { top: auto !important; bottom: 78px; }
+  .hero-content { padding-top: 70px; }
+  .movie-hero { padding-top: 90px; }
+  .page-simple { padding-top: 36px; }
+  .hero-top-badge { top: 16px; }
 }
+
+/* ===== Version claire ===== */
+html[data-theme="light"] {
+  --bg-dark: #f4f1ea; --bg-dark-rgb: 244, 241, 234; --bg-card: #ffffff; --bg-surface: #ebe7de;
+  --text-main: #1b1d22; --text-muted: #5b5f68; --border-subtle: rgba(0,0,0,.13);
+}
+html[data-theme="light"] .page-lead, html[data-theme="light"] .prose p, html[data-theme="light"] .prose ul, html[data-theme="light"] .tarif-card ul,
+html[data-theme="light"] .info-card p, html[data-theme="light"] .kpi span, html[data-theme="light"] .film-card p, html[data-theme="light"] .info-item,
+html[data-theme="light"] .tarif-note, html[data-theme="light"] .footer-links a, html[data-theme="light"] .footer-help a, html[data-theme="light"] .result-item { color: #3b3e46; }
+html[data-theme="light"] .section-title, html[data-theme="light"] .card-title, html[data-theme="light"] .panel-title, html[data-theme="light"] .item-value,
+html[data-theme="light"] .card-date, html[data-theme="light"] .info-item strong, html[data-theme="light"] .form-field label, html[data-theme="light"] .venue-info-box h3,
+html[data-theme="light"] .page-title, html[data-theme="light"] .tarif-card h3, html[data-theme="light"] .card-activite h3, html[data-theme="light"] .film-card h3,
+html[data-theme="light"] .slot-pill, html[data-theme="light"] .site-footer h4, html[data-theme="light"] .result-box h3 { color: #1b1d22; }
+html[data-theme="light"] .page-title:not(.x) { text-shadow: none; }
+html[data-theme="light"] .showtime-horizontal-card, html[data-theme="light"] .practical-details-panel, html[data-theme="light"] .kpi, html[data-theme="light"] .film-card { background: rgba(255,255,255,.75); }
+html[data-theme="light"] .showtime-horizontal-card:hover, html[data-theme="light"] .showtime-horizontal-card.active { background: #fff; }
+html[data-theme="light"] .slot-pill, html[data-theme="light"] .form-field input, html[data-theme="light"] .form-field textarea, html[data-theme="light"] .salles-search input { background: var(--bg-surface); color: #1b1d22; }
+html[data-theme="light"] .btn-back-home, html[data-theme="light"] .badge-pmr { background: rgba(0,0,0,.06); color: #1b1d22; }
+html[data-theme="light"] .site-footer { background: #fff; }
+html[data-theme="light"] .footer-brand p, html[data-theme="light"] .footer-bottom { color: #5b5f68; }
+html[data-theme="light"] .social-btn { background: rgba(0,0,0,.06); color: #1b1d22; }
+html[data-theme="light"] .tarif-card.featured { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 16%, #fff), #fff 60%); }
+html[data-theme="light"] #app-loader { background: var(--bg-dark); }
 </style>
 </head>
 
@@ -1007,7 +1051,7 @@ h1, h2, h3, h4, .section-title, .card-title, .hero-title, .movie-title, .page-ti
     </div>
   </div>
   <div class="footer-help"><h4>Centre d'aide</h4><div id="footer-help"></div></div>
-  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire</div>
+  <div class="footer-bottom">© <span id="footer-year"></span> Balad'Images – Familles Rurales Maine-et-Loire<button class="theme-btn" id="themeBtn" onclick="toggleTheme()"></button></div>
 </footer>
 
 <script>
@@ -1627,6 +1671,7 @@ function setTint(heroSec, tint) {
   heroSec.style.setProperty('--tint2', tint.t2);
   const ext = heroSec.nextElementSibling;
   if (ext && ext.classList.contains('movie-extend')) { ext.style.setProperty('--tint2', tint.t2); if (tint.f) ext.style.setProperty('--field', tint.f); }
+  const vw = heroSec.closest('.view-page'); if (vw) vw.style.setProperty('--tint2', tint.t2);
   const h = document.querySelector('header');
   if (h) h.style.setProperty('--hdr-dark', tint.h); // header plus sombre si le haut de l'image est clair
 }
@@ -1660,6 +1705,7 @@ function openMovieDetails(filmId, selectedSeanceId = null) {
 
   // Voile neutre par défaut ; remplacé par la teinte dominante dès que l'image est lue
   document.querySelector('header').style.removeProperty('--hdr-dark');
+  const vwr = heroSec.closest('.view-page'); if (vwr) vwr.style.removeProperty('--tint2');
   heroSec.style.setProperty('--tint', '15,15,18');
   heroSec.style.setProperty('--tint2', '15,15,18');
 
@@ -2293,7 +2339,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2432,7 +2478,7 @@ function loadYT() {
 }
 function ytId(u) { const m = String(u || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/|\/v\/)([\w-]{11})/); return m ? m[1] : null; }
 function sizeHeroVideos() {
-  document.querySelectorAll('.hero-video').forEach(h => h.style.setProperty('--vk', (Math.max(h.clientWidth / 1920, h.clientHeight / 1080) * 1.0).toFixed(4)));
+  document.querySelectorAll('.hero-video').forEach(h => h.style.setProperty('--vk', (Math.max(h.clientWidth / 1920, h.clientHeight / 1080) * 1.3).toFixed(4)));
 }
 function destroyHeroPlayer(i) {
   const p = heroPool[i]; if (!p) return;
@@ -2543,12 +2589,14 @@ function applySynopsisLang(root) {
   });
 }
 
-/* ---- Logo : petit vol au survol / clic ---- */
+/* ---- Logo : battement d'ailes au survol / clic ---- */
 (function () {
   const lc = document.querySelector('.logo-container'), im = lc && lc.querySelector('img'); if (!im) return;
-  const fly = () => { im.classList.remove('fly'); void im.offsetWidth; im.classList.add('fly'); };
+  const w = document.createElement('span'); w.className = 'logo-fly';
+  im.replaceWith(w); w.appendChild(im); im.classList.add('fb');
+  ['l', 'b', 'r'].forEach(k => { const c = im.cloneNode(); c.className = 'brand-logo-img lp ' + k; c.removeAttribute('fetchpriority'); c.setAttribute('aria-hidden', 'true'); w.appendChild(c); });
+  const fly = () => { if (w.classList.contains('flying')) return; w.classList.add('flying'); setTimeout(() => w.classList.remove('flying'), 1850); };
   lc.addEventListener('mouseenter', fly); lc.addEventListener('click', fly);
-  im.addEventListener('animationend', () => im.classList.remove('fly'));
 })();
 
 /* ---- Titre : logo du film si disponible (colonne "logo"), sinon texte ---- */
@@ -2563,7 +2611,15 @@ window.addEventListener('scroll', () => {
   if (b) b.style.width = (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%';
 }, { passive: true });
 
+function updateThemeBtn() { const b = $('themeBtn'); if (b) b.textContent = document.documentElement.dataset.theme === 'light' ? '🌙 Mode sombre' : '☀ Mode clair'; }
+function toggleTheme() {
+  const light = document.documentElement.dataset.theme === 'light';
+  if (light) delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = 'light';
+  try { localStorage.setItem('balad_theme', light ? 'dark' : 'light'); } catch (e) {}
+  updateThemeBtn();
+}
 function initFooter() {
+  updateThemeBtn();
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
   $('footer-socials').innerHTML = SITE.socials.map(s =>
