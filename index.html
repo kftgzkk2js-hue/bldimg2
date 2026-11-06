@@ -708,6 +708,69 @@ html[data-theme="light"] .footer-brand p, html[data-theme="light"] .footer-botto
 html[data-theme="light"] .social-btn { background: rgba(0,0,0,.06); color: #1b1d22; }
 html[data-theme="light"] .tarif-card.featured { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 16%, #fff), #fff 60%); }
 html[data-theme="light"] #app-loader { background: var(--bg-dark); }
+
+/* ===== v7 ===== */
+.hdr-progress, .hdr-progress-fill { display: none !important; }
+.nav-link::after { background: var(--hdr-accent, var(--fr-orange)); }
+#view-home, #view-movie, #view-venue { --accent: var(--fr-orange); }
+.section-title::after, .page-title::after { background: var(--accent, var(--fr-orange)); }
+.fr-logo { display: block !important; }
+.fr-logo-link { display: none; flex-shrink: 0; align-items: center; }
+@media (min-width: 1280px) { .fr-logo-link { display: flex; } }
+header { transition: background .3s ease, backdrop-filter .3s ease; }
+@media (min-width: 769px) { body.hdr-clear header { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; } }
+.d-only { display: inline; } .m-only { display: none; }
+
+/* Nos salles : carte plein écran + panneau flottant */
+#view-salles { padding: 0 !important; height: 100vh; min-height: 100vh !important; overflow: hidden; position: relative; background: var(--bg-dark); }
+#view-salles .page-wrap { position: absolute; inset: 0; max-width: none; padding: 0; margin: 0; }
+#view-salles #sallesMap { position: absolute; inset: 0; z-index: 0; height: 100%; min-height: 0; border-radius: 0; border: 0; }
+#view-salles #sallesMap .leaflet-top { top: 72px; }
+.salles-panel { position: absolute; top: 84px; right: 18px; z-index: 500; width: min(400px, calc(100% - 36px)); background: rgba(20,20,24,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+.salles-panel .page-title { font-size: 1.5rem; margin-bottom: 6px; }
+.salles-panel .page-lead { font-size: .85rem; margin-bottom: 12px; }
+.salles-panel .salles-search { margin-bottom: 0; max-width: none; }
+.salles-panel #sallesResult { margin: 10px 0 0; }
+.salles-note { position: absolute; left: 12px; bottom: 12px; z-index: 5; font-size: .74rem; color: #222; background: rgba(255,255,255,.8); padding: 3px 8px; border-radius: 8px; margin: 0; }
+.salles-note:empty { display: none; }
+html[data-theme="light"] .salles-panel { background: rgba(255,255,255,.92); }
+.pin-num { position: relative; width: 28px; height: 36px; }
+.pin-num span { position: absolute; top: 4px; left: 0; right: 0; text-align: center; font-size: .68rem; line-height: 16px; font-weight: 800; color: #1b1d22; }
+
+@media (max-width: 768px) {
+  .d-only { display: none; } .m-only { display: inline; }
+  .salles-panel { top: auto; bottom: 84px; left: 10px; right: 10px; width: auto; padding: 10px 12px; }
+  .salles-panel .page-title { font-size: 1.1rem; margin-bottom: 2px; }
+  .salles-panel .page-title::after { display: none; }
+  .salles-panel .page-lead { font-size: .78rem; margin-bottom: 8px; }
+  .salles-panel .salles-search input { padding: 8px 14px; font-size: .85rem; }
+  .salles-panel .salles-search .btn-primary { padding: 8px 14px !important; font-size: .82rem; }
+  .salles-panel .salles-search .search-dropdown { top: auto; bottom: 100%; margin: 0 0 6px; right: 0; }
+  .salles-panel #sallesResult .result-box { max-height: 17vh; overflow: auto; padding: 10px 12px; }
+  #view-salles #sallesMap .leaflet-top { top: 10px; }
+  .salles-note { bottom: 150px; }
+}
+
+/* ===== Version claire : header inversé, fondus vers le blanc ===== */
+html[data-theme="light"] header { background: rgba(255,255,255,.88); }
+html[data-theme="light"] body:not(.hdr-clear) header .nav-link, html[data-theme="light"] body:not(.hdr-clear) header .logo-text,
+html[data-theme="light"] body:not(.hdr-clear) header .menu-burger-btn, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn,
+html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .dropdown-icon,
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input { color: #1b1d22; }
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input, html[data-theme="light"] body:not(.hdr-clear) header .header-location-select, html[data-theme="light"] body:not(.hdr-clear) header .lang-btn { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.2); }
+html[data-theme="light"] body:not(.hdr-clear) header .header-search-input::placeholder { color: rgba(0,0,0,.5); }
+html[data-theme="light"] body:not(.hdr-clear) header .search-btn-trigger svg { fill: #1b1d22; }
+html[data-theme="light"] body:not(.hdr-clear) header .fr-logo { filter: brightness(0); }
+html[data-theme="light"] .header-location-select option { color: #1b1d22; }
+html[data-theme="light"] .mobile-nav-overlay { background: rgba(244,241,234,.98); }
+html[data-theme="light"] .movie-hero::after { background:
+  radial-gradient(ellipse 70% 55% at 12% 60%, rgba(var(--tint), .85) 0%, rgba(var(--tint), .5) 40%, rgba(var(--tint), 0) 100%),
+  linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .06) 28%, rgba(var(--tint), .42) 50%, rgba(var(--tint2), .72) 72%, rgba(var(--bg-dark-rgb), .9) 92%, var(--bg-dark) 100%); }
+html[data-theme="light"] .hero-overlay-gradient { background: linear-gradient(180deg, rgba(15,15,18,.25) 0%, rgba(15,15,18,.1) 30%, rgba(15,15,18,.18) 50%, rgba(15,15,18,.45) 68%, rgba(15,15,18,.6) 82%, rgba(var(--bg-dark-rgb), .9) 95%, var(--bg-dark) 100%); }
+html[data-theme="light"] #view-movie .showtimes-section, html[data-theme="light"] #view-venue .catalog-container { background: linear-gradient(180deg, rgba(var(--tint2, 15, 15, 18), .08) 0, rgba(var(--bg-dark-rgb), 0) 460px); }
+@media (max-width: 768px) {
+  html[data-theme="light"] .movie-hero::after { background: linear-gradient(180deg, rgba(var(--tint), 0) 0%, rgba(var(--tint), .28) 18%, rgba(var(--tint), .62) 38%, rgba(var(--tint2), .82) 60%, rgba(var(--bg-dark-rgb), .9) 85%, var(--bg-dark) 100%); }
+}
 </style>
 </head>
 
@@ -756,7 +819,7 @@ html[data-theme="light"] #app-loader { background: var(--bg-dark); }
   </nav>
 
   <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Language">EN</button>
-  <img class="fr-logo" src="https://www.famillesrurales.org/sites/multisite.famillesrurales.org._www/files/styles/logo/public/logo_institutionnel_blanc2.png?itok=ON3WOdcm" alt="Familles Rurales" loading="lazy">
+  <a class="fr-logo-link" href="https://maine-et-loire.famillesrurales.org" target="_blank" rel="noopener noreferrer" aria-label="Familles Rurales Maine-et-Loire"><img class="fr-logo" src="https://www.famillesrurales.org/sites/multisite.famillesrurales.org._www/files/styles/logo/public/logo_institutionnel_blanc2.png?itok=ON3WOdcm" alt="Familles Rurales" loading="lazy"></a>
   <button class="menu-burger-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
 </header>
 
@@ -809,8 +872,8 @@ html[data-theme="light"] #app-loader { background: var(--bg-dark); }
 <!-- ===== NOS SALLES ===== -->
 <div id="view-salles" class="view-page page-simple">
   <div class="page-wrap">
-    <h1 class="page-title">Nos salles</h1>
-    <p class="page-lead">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</p>
+    <div class="salles-panel"><h1 class="page-title">Nos salles</h1>
+    <p class="page-lead"><span class="d-only">Retrouvez tous nos lieux de projection. Cliquez sur un repère pour découvrir la salle, ou cherchez votre commune : si elle n'a pas de séance, nous vous indiquons les 3 salles les plus proches.</span><span class="m-only">Touchez un repère, ou cherchez votre commune.</span></p>
 
     <div class="salles-search">
       <input type="text" id="sallesSearch" placeholder="Rechercher une commune..." autocomplete="off"
@@ -819,6 +882,7 @@ html[data-theme="light"] #app-loader { background: var(--bg-dark); }
       <div class="search-dropdown" id="sallesSuggest"></div>
     </div>
     <div id="sallesResult"></div>
+    </div>
     <div id="sallesMap"></div>
     <div class="salles-note" id="sallesNote"></div>
   </div>
@@ -1507,6 +1571,7 @@ function switchView(targetViewId, cb) {
     const target = $(targetViewId);
     if (target) { target.classList.add('active-view'); window.scrollTo(0, 0); }
     document.body.classList.toggle('view-venue-active', targetViewId === 'view-venue');
+    updateHdrClear(); setHdrAccent(targetViewId);
     if (targetViewId !== 'view-movie' && targetViewId !== 'view-venue' && !PAGE_BG[targetViewId.replace('view-', '')]) document.querySelector('header').style.removeProperty('--hdr-dark');
 
     // Surbrillance du menu
@@ -2044,6 +2109,32 @@ function popupHtml(v) {
     </div>`;
 }
 
+function parseSeanceDate(str) {
+  str = String(str || '').trim();
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if (m) { let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2] - 1, +m[1]); }
+  m = str.match(/(\d{1,2})\s+([a-zéûàè.]+)/i);
+  if (m) {
+    const mo = ['janv', 'févr', 'mars', 'avr', 'mai', 'juin', 'juil', 'août', 'sept', 'oct', 'nov', 'déc'].findIndex(x => m[2].toLowerCase().startsWith(x));
+    if (mo >= 0) { let d = new Date(now.getFullYear(), mo, +m[1]); if (d < new Date(today.getTime() - 7 * 864e5)) d = new Date(now.getFullYear() + 1, mo, +m[1]); return d; }
+  }
+  return null;
+}
+function venueDays(v) {
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let best = null;
+  v.seances.forEach(x => { const d = parseSeanceDate(x.date_texte); if (!d) return; const diff = Math.round((d - today) / 864e5); if (diff >= 0 && (best === null || diff < best)) best = diff; });
+  return best;
+}
+function dayLabel(v) { const d = venueDays(v); return d === null ? '' : d === 0 ? " · aujourd'hui" : d === 1 ? ' · demain' : ' · dans ' + d + ' j'; }
+const PROJ_SVG = '<svg width="36" height="30" viewBox="0 0 36 30"><circle cx="10" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><circle cx="22" cy="8" r="6" fill="#111" stroke="#fff" stroke-width="1.5"/><rect x="4" y="12" width="24" height="14" rx="3" fill="#111" stroke="#fff" stroke-width="1.5"/><path d="M28 15L34 12V25L28 22z" fill="#111" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function pinIconFor(v) {
+  const d = venueDays(v);
+  if (d === 0) return L.divIcon({ className: 'pin-icon', html: PROJ_SVG, iconSize: [36, 30], iconAnchor: [18, 28], popupAnchor: [0, -26], tooltipAnchor: [0, -24] });
+  if (d === null) return L.divIcon({ className: 'pin-icon', html: PIN_SVG, iconSize: [30, 40], iconAnchor: [15, 40], popupAnchor: [0, -38], tooltipAnchor: [0, -34] });
+  return L.divIcon({ className: 'pin-icon', html: '<div class="pin-num"><svg width="28" height="36" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="8" fill="#fff"/></svg><span>' + (d > 99 ? '99+' : d) + '</span></div>', iconSize: [28, 36], iconAnchor: [14, 36], popupAnchor: [0, -34], tooltipAnchor: [0, -30] });
+}
 const PIN_SVG = '<svg width="30" height="40" viewBox="0 0 24 32"><path d="M12 0C5.4 0 0 5.2 0 11.6 0 20 12 32 12 32s12-12 12-20.4C24 5.2 18.6 0 12 0z" fill="#E88C1E"/><circle cx="12" cy="11.5" r="4.6" fill="#fff"/></svg>';
 
 function drawSallesMarkers() {
@@ -2055,8 +2146,8 @@ function drawSallesMarkers() {
   let missing = 0;
   sallesVenues.forEach(v => {
     if (!v.coords) { missing++; return; }
-    const m = L.marker(v.coords, { icon, title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
-    m.bindTooltip(v.id, { direction: 'top' });
+    const m = L.marker(v.coords, { icon: pinIconFor(v), title: v.id }).bindPopup(popupHtml(v), { minWidth: 250, maxWidth: 250, autoPanPaddingTopLeft: [20, 90], autoPanPaddingBottomRight: [20, 20] });
+    m.bindTooltip(v.id + dayLabel(v), { direction: 'top' });
     m.addTo(sallesLayer);
     sallesMarkers[v.id] = m;
     pts.push(v.coords);
@@ -2078,7 +2169,7 @@ async function initSalles() {
     return;
   }
   if (!sallesMap) {
-    sallesMap = L.map('sallesMap', { scrollWheelZoom: false }).setView([47.45, -0.55], 9);
+    sallesMap = L.map('sallesMap', { scrollWheelZoom: false, dragging: !L.Browser.mobile }).setView([47.45, -0.55], 9);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
@@ -2339,7 +2430,7 @@ const EN = {
 "Accueil":"Home","Nos salles":"Our venues","Activités":"Activities","Tarifs":"Prices","À propos":"About","Bénévolat":"Volunteering","Nous contacter":"Contact us","Mentions légales":"Legal notice",
 "Cinémas":"Cinemas","Cinémas itinérants Balad'images":"Balad'images mobile cinemas","Rechercher...":"Search...","Chargement du programme...":"Loading the programme...",
 "Toute la programmation réseau":"Full network programme","Prochaines projections":"Upcoming screenings","Prochaines séances :":"Next screenings:","Programmation à":"Programme in","🗺️ Toutes nos salles":"🗺️ All our venues",
-"Films à l'affiche":"Now showing","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
+"Films à l'affiche":"Now showing","Touchez un repère, ou cherchez votre commune.":"Tap a pin, or search for your town.","☀ Mode clair":"☀ Light mode","🌙 Mode sombre":"🌙 Dark mode","Aucun film trouvé.":"No film found.","Aucune séance programmée pour ce film.":"No screening scheduled for this film.","← Retour":"← Back","← Retour à l'accueil":"← Back to home","← Accueil":"← Home","← Toutes les activités":"← All activities",
 "Lire la suite":"Read more","Réduire":"Show less","Voir moins":"Show less","Bande-annonce":"Trailer","Séance à":"Screening in","Lieu & Adresse":"Venue & address","Services":"Services","Paiements":"Payment","Voir la salle & infos":"See the venue & info","Voir le détail des tarifs":"See full prices","Détail de la séance":"Screening details",
 "Plein tarif":"Full price","Tarif réduit":"Reduced price","Enfant adhérent -14 ans":"Member child under 14","Groupes (sur demande)":"Groups (on request)","Projection numérique 2K":"2K digital projection","CB, Espèces, Chèques":"Card, cash, cheques","Noter ce film":"Rate this film","réal.":"dir.",
 "Informations pratiques —":"Practical information —","Salle :":"Venue:","Réseau :":"Network:","Services :":"Services:","Paiement :":"Payment:","♿ Accessibilité PMR garantie":"♿ Wheelchair accessible","Écran géant, Son Digital":"Giant screen, digital sound","CB, Espèces":"Card, cash",
@@ -2605,11 +2696,16 @@ function titleHtml(movie, cls) {
   if (!/^https?:/i.test(u)) return `<h1 class="${cls}">${movie.titre}</h1>`;
   return `<h1 class="${cls} has-logo"><img src="${esc(u)}" alt="${esc(movie.titre)}" onerror="this.parentNode.classList.remove('has-logo');this.replaceWith(document.createTextNode(this.alt))"></h1>`;
 }
-/* ---- Barre de progression du header ---- */
-window.addEventListener('scroll', () => {
-  const h = document.documentElement, b = $('hdrProgress');
-  if (b) b.style.width = (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight) * 100) + '%';
-}, { passive: true });
+/* ---- Header effacé en haut de l'accueil ---- */
+function updateHdrClear() {
+  const h = $('view-home');
+  document.body.classList.toggle('hdr-clear', !!(h && h.classList.contains('active-view') && window.scrollY < 40));
+}
+window.addEventListener('scroll', updateHdrClear, { passive: true });
+function setHdrAccent(id) {
+  const k = id.replace('view-', ''), m = { tarifs: 'blue', apropos: 'blue', mentions: 'blue', aide: 'blue', activites: 'green', activite: 'green', benevolat: 'green' };
+  document.documentElement.style.setProperty('--hdr-accent', 'var(--fr-' + (m[k] || 'orange') + ')');
+}
 
 function updateThemeBtn() { const b = $('themeBtn'); if (b) b.textContent = document.documentElement.dataset.theme === 'light' ? '🌙 Mode sombre' : '☀ Mode clair'; }
 function toggleTheme() {
@@ -2619,7 +2715,7 @@ function toggleTheme() {
   updateThemeBtn();
 }
 function initFooter() {
-  updateThemeBtn();
+  updateThemeBtn(); updateHdrClear();
   $('footer-help').innerHTML = HELP.map(h => `<a onclick="openHelp('${h.id}')">${h.q}</a>`).join('');
   $('footer-year').textContent = new Date().getFullYear();
   $('footer-socials').innerHTML = SITE.socials.map(s =>
